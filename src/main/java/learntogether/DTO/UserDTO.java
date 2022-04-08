@@ -1,8 +1,7 @@
 package learntogether.DTO;
 
 import com.sun.istack.NotNull;
-import learntogether.Validation.Interface.ValidEmail;
-import org.springframework.stereotype.Component;
+import learntogether.Validation.Annotation.ValidEmail;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;

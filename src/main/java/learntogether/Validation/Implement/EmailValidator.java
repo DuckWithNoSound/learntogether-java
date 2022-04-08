@@ -1,5 +1,6 @@
 package learntogether.Validation.Implement;
 
+import learntogether.Validation.Annotation.ValidEmail;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -24,7 +25,6 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
     private boolean validateEmail(String email) {
         pattern = Pattern.compile(EMAIL_PATTERN);
         matcher = pattern.matcher(email);
-        boolean is = matcher.matches();
-        return is;
+        return matcher.matches();
     }
 }
