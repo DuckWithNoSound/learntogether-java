@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/decorators">
+	<excludes>
+		<pattern>/API*</pattern>
+	</excludes>
+	<decorator name="webDec" page="web.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+</decorators>
