@@ -36,12 +36,31 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(userEnity.getRole().getId() + ""));
         // Put user's information to spring security store
+        return putUserEntityToMyUser(userEnity);
+    }
+
+    public MyUser loadUserById(Long id) throws UsernameNotFoundException {
+
+        UserEnity userEnity = userRepository.findUserById(id);
+
+        if(userEnity != null) {
+            return putUserEntityToMyUser(userEnity);
+        }
+        return null;
+    }
+
+    private MyUser putUserEntityToMyUser(UserEnity userEnity){
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(userEnity.getRole().getId() + ""));
+        // Put user's information to spring security store
         MyUser user = new MyUser(userEnity.getUsername(),userEnity.getPassword(), true, true, true, true, authorities);
         user.setFullname(userEnity.getFullname());
         user.setAvatar(userEnity.getAvatar());
         user.setUserQuote(userEnity.getUserQuote());
         user.setPhoneNumber(userEnity.getPhoneNumber());
         user.setEmail(userEnity.getEmail());
+        user.setId(userEnity.getId());
+        user.setRole(userEnity.getRole());
         return user;
     }
 }

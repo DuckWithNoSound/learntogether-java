@@ -1,6 +1,7 @@
 package learntogether.DTO;
 
 import com.sun.istack.NotNull;
+import learntogether.Entity.RoleEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
@@ -11,13 +12,14 @@ import java.util.Collection;
   Created by Luvbert
 */
 public class MyUser extends User {
+    private Long id;
     private String fullname;
     private String avatar;
     private String email;
     private String phoneNumber;
     private String userQuote;
     private Integer status;
-    private Long roleId;
+    private RoleEntity role;
     private Timestamp createdDate;
     private Timestamp modifiedDate;
 
@@ -77,12 +79,12 @@ public class MyUser extends User {
         this.status = status;
     }
 
-    public Long getRoleId() {
-        return roleId;
+    public RoleEntity getRole() {
+        return role;
     }
 
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
 
     public Timestamp getCreatedDate() {
@@ -99,5 +101,13 @@ public class MyUser extends User {
 
     public void setModifiedDate(Timestamp modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

@@ -28,7 +28,7 @@ public class UserService implements IUserService {
 
     @Override
     public Map registerNewUserAccount(UserDTO userDTO) {
-        Map<String, String> message = new HashMap<String, String>();
+        Map<String, String> message = new HashMap<>();
         // Service validate
         if(isEmailExist(userDTO.getEmail())){
             message.put("email", "Email address is already registered !");
@@ -55,10 +55,27 @@ public class UserService implements IUserService {
         return message;
     }
 
+
+    @Override
+    public UserEnity findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
     public boolean isEmailExist(String email){
         return userRepository.findByEmail(email) != null;
     }
+
+    @Override
     public boolean isUsernameExist(String username){
         return userRepository.findByUsername(username) != null;
+    }
+
+    @Override
+    public boolean isUsernameAndPasswordMatch(String username, String password) {
+        UserEnity userEnity = findUserByUsername(username);
+        if(userEnity == null) return false;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(password, userEnity.getPassword());
     }
 }

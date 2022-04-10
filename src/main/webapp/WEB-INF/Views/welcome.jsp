@@ -11,7 +11,6 @@
             <div class="Body__one--register">
                 <label>
                     Đăng ký mới
-                    ${abc}
                 </label>
                 <form action="register" method="POST">
                     <input id="register_input_focus" type="text" name="username" placeholder="Tên đăng nhập" maxlength="60" minlength="6"

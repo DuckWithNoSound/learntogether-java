@@ -1,6 +1,7 @@
 package learntogether.IService;
 
 import learntogether.DTO.UserDTO;
+import learntogether.Entity.UserEnity;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -10,5 +11,9 @@ import java.util.Map;
 */
 @Service
 public interface IUserService {
-    public Map registerNewUserAccount(UserDTO userDTO);
+    Map registerNewUserAccount(UserDTO userDTO);
+    UserEnity findUserByUsername(String username);
+    boolean isEmailExist(String email);
+    boolean isUsernameExist(String username);
+    boolean isUsernameAndPasswordMatch(String username, String password);
 }

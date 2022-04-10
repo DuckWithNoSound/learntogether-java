@@ -10,6 +10,9 @@
 
         <intercept-url pattern="/welcome" access="isAnonymous()"/>
         <intercept-url pattern="/logout" access="isAuthenticated()"/>
+        <intercept-url pattern="/API/login" access="permitAll()"/>
+        <intercept-url pattern="/API/register" access="isAnonymous()"/>
+        <intercept-url pattern="/API/random" access="permitAll()"/>
 
         <access-denied-handler error-page="/welcome?login=failed&amp;accessDenied" />
 
@@ -25,9 +28,11 @@
         <logout logout-url="/logout"/>
         <logout delete-cookies="JSESSIONID"/>
         <logout logout-success-url=""/>
+
+        <custom-filter ref="JwtAuthenticationFilter" before="BASIC_AUTH_FILTER"/>
     </http>
 
-    <authentication-manager >
+    <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="userDetailsServiceImpl">
             <password-encoder ref="bcryptEncoder"/>
         </authentication-provider>
@@ -38,7 +43,8 @@
         <beans:property name="useReferer" value="true" />
     </beans:bean>
 
-    <beans:bean id="userDetailsServiceImpl" class="learntogether.Service.UserDetailsServiceImpl"></beans:bean>
-    <beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></beans:bean>
+    <beans:bean id="userDetailsServiceImpl" class="learntogether.Service.UserDetailsServiceImpl"/>
+    <beans:bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <beans:bean id="JwtAuthenticationFilter" class="learntogether.JWT.JwtAuthenticationFilter"/>
 
 </beans:beans>
