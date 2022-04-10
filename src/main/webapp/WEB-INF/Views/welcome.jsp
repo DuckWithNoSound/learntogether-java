@@ -14,11 +14,13 @@
                     ${abc}
                 </label>
                 <form action="register" method="POST">
-                    <input id="register_input_focus" type="text" name="username" placeholder="Tên đăng nhập" maxlength="60" minlength="6" value="">
+                    <input id="register_input_focus" type="text" name="username" placeholder="Tên đăng nhập" maxlength="60" minlength="6"
+                           value="<c:if test='${tempUserData != null}'>${tempUserData.username}</c:if>">
                     <c:if test="${username != null}">
                         <div class='notify-error'>${username}</div>
                     </c:if>
-                    <input type="email" name="email" placeholder="Email" maxlength="120" minlength="5" value="">
+                    <input type="email" name="email" placeholder="Email" maxlength="120" minlength="5"
+                           value="<c:if test='${tempUserData != null}'>${tempUserData.email}</c:if>">
                     <c:if test="${email != null}">
                         <div class='notify-error'>${email}</div>
                     </c:if>

@@ -1,19 +1,15 @@
 package learntogether.Controller;
 
-import learntogether.DTO.MyUser;
 import learntogether.DTO.UserDTO;
-import learntogether.Error.UserAlreadyExistException;
 import learntogether.IService.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Map;
 
@@ -62,8 +58,11 @@ public class HomeController {
         //check annotation validate
         if(bindingResult.hasErrors()){
             mav = new ModelAndView("welcome");
+            //send error to view
             String error = bindingResult.getFieldError().getField().toString();
             mav.addObject(bindingResult.getFieldError().getField(), bindingResult.getFieldError().getDefaultMessage());
+            //send-keep old data to view
+            mav.addObject("tempUserData", userDTO);
             return mav;
         }
         //Call service to register new account
@@ -71,7 +70,10 @@ public class HomeController {
         //Check service validate
         if(!registered.isEmpty()){
             mav = new ModelAndView("welcome");
+            //send validate error to view
             mav.addAllObjects(registered);
+            //send-keep old data to view
+            mav.addObject("tempUserData", userDTO);
             return mav;
         }
 
