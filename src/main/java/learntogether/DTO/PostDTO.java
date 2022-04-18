@@ -1,16 +1,28 @@
 package learntogether.DTO;
 
+import com.sun.istack.NotNull;
+
+import javax.validation.constraints.NotEmpty;
+
 /*
   Created by Luvbert
 */
 public class PostDTO extends AbstractDTO{
+    @NotNull
+    @NotEmpty
     private String title;
+    @NotNull
+    @NotEmpty
     private String content;
     private String image;
     private Integer viewNumber;
     private Integer score;
-    private Long tagID;
-    private Long userID;
+    @NotNull
+    @NotEmpty
+    private String[] listTagSlug;
+    @NotNull
+    @NotEmpty
+    private String authorName;
 
     public String getTitle() {
         return title;
@@ -52,19 +64,19 @@ public class PostDTO extends AbstractDTO{
         this.score = score;
     }
 
-    public Long getTagID() {
-        return tagID;
+    public String getAuthorName() {
+        return authorName;
     }
 
-    public void setTagID(Long tagID) {
-        this.tagID = tagID;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
-    public Long getUserID() {
-        return userID;
+    public String[] getListTagSlug() {
+        return listTagSlug;
     }
 
-    public void setUserID(Long userID) {
-        this.userID = userID;
+    public void setListTagSlug(String[] listTagSlug) {
+        this.listTagSlug = listTagSlug;
     }
 }

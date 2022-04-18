@@ -9,13 +9,14 @@
     <c:if test="${param.login == null}">
         <div class="modal">
     </c:if>
+            <div class="modal__overlay" onmousedown="modalClick()"></div>
         <div class="modal__body--login">
             <label>
                 Đăng nhập
             </label>
-            <form action="s_spring_security_login" method="POST">
-                <input type="text" placeholder="Tài khoản" name="s_username">
-                <input type="password" name="s_password" placeholder="Mật khẩu">
+            <form action="spring_security_login" method="POST">
+                <input type="text" placeholder="Tài khoản" name="username">
+                <input type="password" placeholder="Mật khẩu" name="password" >
                 <input type="hidden" name="anchor" value="">
                 <button type="submit" name="logIn">Đăng nhập</button>
                 <div class="zxz">

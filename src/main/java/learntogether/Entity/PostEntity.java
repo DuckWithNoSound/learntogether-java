@@ -2,7 +2,6 @@ package learntogether.Entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /*
@@ -23,6 +22,11 @@ public class PostEntity extends BaseEntity{
 
     @Column(name = "view_number")
     private Integer viewNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEnity user;
+
 
     @ManyToMany
     @JoinTable(name = "post_tag_mtm", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
@@ -66,5 +70,13 @@ public class PostEntity extends BaseEntity{
 
     public void setTags(List<TagEntity> tags) {
         this.tags = tags;
+    }
+
+    public UserEnity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEnity user) {
+        this.user = user;
     }
 }

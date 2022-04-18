@@ -1,7 +1,7 @@
 package learntogether.Entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -38,6 +38,9 @@ public class UserEnity extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "role_id")
     private RoleEntity role;
+
+    @OneToMany(mappedBy = "user")
+    private List<PostEntity> posts = new ArrayList<>();
 
     public String getUsername() {
         return username;
@@ -109,5 +112,13 @@ public class UserEnity extends BaseEntity{
 
     public void setRole(RoleEntity role) {
         this.role = role;
+    }
+
+    public List<PostEntity> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<PostEntity> posts) {
+        this.posts = posts;
     }
 }

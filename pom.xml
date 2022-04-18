@@ -72,6 +72,17 @@
          <artifactId>spring-security-acl</artifactId>
          <version>${springsecurity.version}</version>
       </dependency>
+      <dependency>
+         <groupId>com.auth0</groupId>
+         <artifactId>auth0</artifactId>
+         <version>1.0.0</version>
+      </dependency>
+
+      <dependency>
+         <groupId>com.auth0</groupId>
+         <artifactId>auth0-spring-security-api</artifactId>
+         <version>1.0.0-rc.2</version>
+      </dependency>
       <!-- spring secuirty taglibs -->
       <dependency>
          <groupId>org.springframework.security</groupId>
@@ -189,6 +200,12 @@
          <artifactId>jackson-core-asl</artifactId>
          <version>1.9.13</version>
       </dependency>
+
+      <dependency>
+         <groupId>org.json</groupId>
+         <artifactId>json</artifactId>
+         <version>20180813</version>
+      </dependency>
       <!--end json -->
       <!-- JWT -->
       <dependency>
@@ -196,11 +213,7 @@
          <artifactId>jjwt</artifactId>
          <version>0.9.1</version>
       </dependency>
-       <dependency>
-           <groupId>org.json</groupId>
-           <artifactId>json</artifactId>
-           <version>20180813</version>
-       </dependency>
+
        <!-- end JWT -->
    </dependencies>
 

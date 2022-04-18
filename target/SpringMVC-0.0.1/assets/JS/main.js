@@ -10,6 +10,7 @@ let btn_invite_1 = document.querySelector('.Bride_two-btn');
 let btn_invite_2 = document.querySelector('.Bride_last-content a');
 let btn_login_1 = document.querySelector('#logIn_btn');
 
+
 nav_mobile_btn_bars.onclick = function(){
   nav_mobile_btn_bars.setAttribute('style', 'display: none;');
   nav_mobile_btn_x.setAttribute('style', 'display: block;');
@@ -24,8 +25,8 @@ overlay.onclick = function(){
   nav_mobile.setAttribute('style', 'transform: translateX(-100%);');
 }
 
-modal.onclick = function(){
-  modal.setAttribute('style', 'display: none;')
+function modalClick(){
+  modal.setAttribute('style', 'display: none;');
 };
 
 modal_login.onclick = function(event){
@@ -40,8 +41,9 @@ btn_login_mobile.onclick = function(){
 //nnnnnnn
 if(btn_login != null)
 {
-  btn_login.onclick = function(){
+  btn_login.onclick = function(event){
     modal.setAttribute('style', 'display: flex;');
+    event.stopPropagation();
   }
 }
 if(btn_login_1 != null)

@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 */
 public class AbstractDTO {
     private Long id;
+
     private Timestamp createdDate;
     private Timestamp modifiedDate;
 

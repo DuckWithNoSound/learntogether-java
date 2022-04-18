@@ -1,6 +1,6 @@
 package learntogether.Service;
 
-import learntogether.DTO.MyUser;
+import learntogether.DTO.UserDetail;
 import learntogether.Entity.UserEnity;
 import learntogether.Repository.UserRepository;
 import learntogether.SystemConstant;
@@ -19,7 +19,7 @@ import java.util.List;
   Created by Luvbert
 */
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Autowired
     private UserRepository userRepository;
@@ -33,27 +33,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User with username: \'" + username + "\' not found!");
         }
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(userEnity.getRole().getId() + ""));
-        // Put user's information to spring security store
-        return putUserEntityToMyUser(userEnity);
-    }
-
-    public MyUser loadUserById(Long id) throws UsernameNotFoundException {
-
-        UserEnity userEnity = userRepository.findUserById(id);
-
-        if(userEnity != null) {
-            return putUserEntityToMyUser(userEnity);
+        if(userEnity.getStatus() == SystemConstant.INACTIVE_STATUS){
+            System.out.println(username + " has been banned !");
         }
-        return null;
+
+        return putUserEntityToUserDetail(userEnity);
     }
 
-    private MyUser putUserEntityToMyUser(UserEnity userEnity){
+    private UserDetails putUserEntityToUserDetail(UserEnity userEnity){
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(userEnity.getRole().getId() + ""));
         // Put user's information to spring security store
-        MyUser user = new MyUser(userEnity.getUsername(),userEnity.getPassword(), true, true, true, true, authorities);
+        UserDetail user = new UserDetail(userEnity.getUsername(),userEnity.getPassword(), true, true, true, true, authorities);
         user.setFullname(userEnity.getFullname());
         user.setAvatar(userEnity.getAvatar());
         user.setUserQuote(userEnity.getUserQuote());

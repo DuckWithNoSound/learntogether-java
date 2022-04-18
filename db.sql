@@ -70,7 +70,6 @@ CREATE TABLE IF NOT EXISTS `role` (
   `view_number` INT DEFAULT '0',
   `created_date` timestamp null,
   `modified_date` timestamp null,
-  `tag_id` INT NOT NULL,
   `user_id` INT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -83,7 +82,6 @@ CREATE TABLE IF NOT EXISTS `post` (
   `view_number` INT NOT NULL DEFAULT '0',
   `created_date` timestamp null,
   `modified_date` timestamp null,
-  `tag_id` INT NOT NULL,
   `user_id` INT NOT NULL,
   `score` INT NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -213,12 +211,12 @@ INSERT INTO `user` (`id`, `username`, `password`, `avatar`, `fullname`, `email`,
 (3, 'drgon10', '$2y$10$ngPwr.wWccslXYfCyJ9RfemoxsW437Z88toLmWPgBUTAyqp4De2Pe', '/assets/Uploads/Avatar/user-avatar-3.jpg', 'Nguyễn Đức Mạnh', 'ducmanh01082000@gmail.com', 'Chưa có', 5, 'Học tập cùng LearnTogether');
 
 INSERT INTO `tag` (`id`, `tag_name`, `tag_slug`) VALUES
-(1, 'Hỏi đáp/Chia sẻ', 'Question/share'),
-(2, 'C++', 'Cpp'),
-(3, 'Java', 'Java'),
+(1, 'Hỏi đáp/Chia sẻ', 'question-share'),
+(2, 'C++', 'cpp'),
+(3, 'Java', 'java'),
 (4, 'PHP', 'php'),
 (5, 'Python', 'python'),
-(6, 'Cấu trúc dữ liệu ', 'data_structures'),
-(7, 'Giải thuật', 'Algorimths'),
-(8, 'C#', 'C-sharp');
+(6, 'Cấu trúc dữ liệu ', 'data-structures'),
+(7, 'Giải thuật', 'algorimths'),
+(8, 'C#', 'csharp');
 
