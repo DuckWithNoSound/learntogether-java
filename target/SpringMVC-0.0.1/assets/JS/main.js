@@ -27,7 +27,7 @@ overlay.onclick = function(){
 
 function modalClick(){
   modal.setAttribute('style', 'display: none;');
-};
+}
 
 modal_login.onclick = function(event){
   event.stopPropagation();
