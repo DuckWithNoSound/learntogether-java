@@ -69,7 +69,7 @@
                                 <security:authorize access="hasAnyRole('1', '2')">
                                     <a href="">Trang quản trị</a>
                                 </security:authorize>
-                                <a href="<c:url value='/logout'/>">Đăng xuất</a>
+                                <a onclick="deleteAuthCookie()" href="<c:url value='/logout'/>">Đăng xuất</a>
                             </div>
                         </div>
                         |

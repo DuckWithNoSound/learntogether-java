@@ -53,17 +53,6 @@ public class CookieAuthenticationFilter extends OncePerRequestFilter {
                     .orElse(null);
             if(authCookie != null) auth(authCookie, request);
 
-            /*
-            if(cookies !=null){
-                String authCookie = null;
-                for (Cookie cookie: cookies) {
-                    if(cookie.getName().equals("AuthenticationCookie")){
-                        authCookie = cookie.getValue();
-                    }
-                }
-                if(authCookie != null) auth(authCookie, request);
-            }
-            */
         } catch (MalformedJwtException malformedJwtException){
             message.put("message", "Token is invalid");
         } catch (ExpiredJwtException expiredJwtException) {

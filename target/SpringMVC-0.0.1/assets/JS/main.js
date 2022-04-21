@@ -131,6 +131,9 @@ function convertFormToJson(form){
   })
   return data
 }
+function deleteAuthCookie(){
+  document.cookie = "AuthenticationCookie= ; max-age=" + 2*60 + "; path=/;";
+}
 function clearOnInputChangeAtLogin(){
   document.querySelector(".login__alert label").innerHTML = ""
 }
