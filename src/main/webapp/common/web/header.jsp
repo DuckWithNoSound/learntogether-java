@@ -1,5 +1,6 @@
 <%@ page import="learntogether.Util.SecurityUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!-- Preload -->
 <div class="app">
     <div class="page_overlay"></div>
@@ -14,24 +15,19 @@
             <label>
                 Đăng nhập
             </label>
-            <form action="spring_security_login" method="POST">
-                <input type="text" placeholder="Tài khoản" name="username">
-                <input type="password" placeholder="Mật khẩu" name="password" >
-                <input type="hidden" name="anchor" value="">
-                <button type="submit" name="logIn">Đăng nhập</button>
+            <form action="spring_security_login" method="POST" id="loginForm">
+                <input type="text" placeholder="Tài khoản" name="username" onchange="clearOnInputChangeAtLogin()">
+                <input type="password" placeholder="Mật khẩu" name="password" onchange="clearOnInputChangeAtLogin()">
+                <button type="button" onclick="loginAPI()" name="logIn">Đăng nhập</button>
                 <div class="zxz">
                     <a style="cursor: pointer;" onclick="return forgotPassword()">Quên mật khẩu?</a>
                 </div>
             </form>
-            <c:if test="${param.login == 'failed'}">
-                <div class="login__alert">
-                    <label>
-                        <c:if test="${param.incorrectAccount != null}">
-                            Username or password incorrect!
-                        </c:if>
-                    </label>
-                </div>
-            </c:if>
+            <div class="login__alert">
+                <label>
+
+                </label>
+            </div>
             <p>Chưa có tài khoản? <a href="<c:url value='/welcome'/>">Đăng ký ngay</a></p>
         </div>
     </div>

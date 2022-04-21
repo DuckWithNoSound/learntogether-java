@@ -94,7 +94,46 @@ if( document.querySelector('.home__news__new__btn') != null)
     document.querySelector('.news__trendy').setAttribute('style', 'display: none;');
   }
 }
-// FUNCTION 
+// FUNCTION
+function loginAPI(){
+  let jsonData = convertFormToJson($('#loginForm'))
+  $.ajax({
+    url: window.location.origin + "/SpringMVC_war/api/auth/login",
+    type: "POST",
+    contentType: "application/json",
+    data: JSON.stringify(jsonData),
+    dataType: "json",
+    success: function (result){
+      if(result.username != null){
+        let accessToken = JSON.stringify(result.accessToken).substring(7);
+        document.cookie = "AuthenticationCookie=" + accessToken + "; max-age=" + 2*60 + "; path=/;";
+        let currentPath = window.location.pathname
+        if(currentPath.includes("/welcome")){
+          window.location.pathname = "/SpringMVC_war/home"
+        } else {
+          location.reload();
+        }
+      } else {
+        document.querySelector(".login__alert label").innerHTML = result.Error
+      }
+    },
+    error: function (xhr, status, error){
+      let err = eval("(" + xhr.responseText + ")")
+      alert(err.Message)
+    }
+  })
+}
+function convertFormToJson(form){
+  let formData = $(form).serializeArray()
+  let data = {}
+  $.each(formData, function (i, v) {
+    data[v.name + ""] = v.value
+  })
+  return data
+}
+function clearOnInputChangeAtLogin(){
+  document.querySelector(".login__alert label").innerHTML = ""
+}
 function validateForm() {
   var x = document.forms["discussion_search_form"]["discussionSearch"].value;
   if (x == "") {
@@ -103,7 +142,6 @@ function validateForm() {
   }
 }
 function errorForm() {
-  console.log('aaa');
   alert("Chức năng này hiện đang bảo trì, vui lòng thử lại sau !");
   return false;
 }
