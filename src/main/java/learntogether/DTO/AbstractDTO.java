@@ -1,6 +1,7 @@
 package learntogether.DTO;
 
-import java.sql.Timestamp;
+
+import java.util.Date;
 
 /*
   Created by Luvbert
@@ -8,8 +9,8 @@ import java.sql.Timestamp;
 public class AbstractDTO {
     private Long id;
 
-    private Timestamp createdDate;
-    private Timestamp modifiedDate;
+    private Date createdDate;
+    private Date modifiedDate;
 
     public boolean isExist()
     {
@@ -23,17 +24,21 @@ public class AbstractDTO {
     public void setId(long id) {
         this.id = id;
     }
-    public Timestamp getCreatedDate() {
+
+
+    public Date getCreatedDate() {
         return createdDate;
     }
-    public void setCreatedDate(Timestamp createdDate) {
+
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
-    public Timestamp getModifiedDate() {
+
+    public Date getModifiedDate() {
         return modifiedDate;
     }
-    public void setModifiedDate(Timestamp modifiedDate) {
+
+    public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
-
 }

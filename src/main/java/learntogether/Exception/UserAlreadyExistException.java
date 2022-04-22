@@ -1,4 +1,4 @@
-package learntogether.Error;
+package learntogether.Exception;
 
 /*
   Created by Luvbert

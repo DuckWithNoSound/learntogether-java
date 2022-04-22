@@ -20,7 +20,7 @@ import java.util.*;
 @Component
 public class JwtAuthService {
     private final String JWT_SECRET_KEY = "luvbertttttt";
-    private final Long JWT_EXPIRATION = 2 * 60 * 1000l;
+    private final Long JWT_EXPIRATION = 20 * 60 * 1000l;
     static final String TOKEN_PREFIX = "Bearer ";
     static final String HEADER_STRING = "Authorization";
 
