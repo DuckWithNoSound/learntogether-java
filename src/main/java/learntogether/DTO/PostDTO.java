@@ -18,6 +18,8 @@ public class PostDTO extends AbstractDTO{
     private Integer score;
     private String[] listTagSlug;
     private String authorName;
+    private UserDTO author;
+
     private Long[] ids;
     public String getTitle() {
         return title;
@@ -82,5 +84,13 @@ public class PostDTO extends AbstractDTO{
 
     public void setIds(Long[] ids) {
         this.ids = ids;
+    }
+
+    public UserDTO getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(UserDTO author) {
+        this.author = author;
     }
 }

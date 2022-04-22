@@ -8,6 +8,8 @@ import learntogether.IService.IPostService;
 import learntogether.IService.ITagService;
 import learntogether.IService.IUserService;
 import learntogether.Repository.PostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -127,5 +129,11 @@ public class PostService implements IPostService {
             postRepository.delete((long)arrPostId[i]);
         }
         return true;
+    }
+
+    @Override
+    public Page<PostDTO> findAll() throws Exception {
+        Page<PostEntity> page = postRepository.findAll(PageRequest.of(0, 10));
+        return null;
     }
 }

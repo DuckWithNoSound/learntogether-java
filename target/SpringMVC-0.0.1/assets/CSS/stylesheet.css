@@ -1411,40 +1411,6 @@ footer{
     margin-right: 25px;
 }
 
-.discussion__pagination{
-    width: 100%;
-    margin-top: 35px;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-}
-.discussion__pagination > a{
-    background-color: var(--whiteColor);
-    color: var(--textColor);
-    border-radius: 4px;
-    margin: 0 5px;
-    width: 50px;
-    height: 28px;
-    display: flex;
-    flex-wrap: nowrap;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    font-size: 1.45rem;
-    font-weight: bold;
-}
-.discussion__pagination > a:hover{
-    background-color: var(--hyperlinkColor);
-    color: var(--whiteColor);
-}
-#pagination--activated{
-    background-color: var(--hyperlinkColor);
-    color: var(--whiteColor);
-}
 /*==================end-share============*/
 /*==================login================*/
 .login__body{

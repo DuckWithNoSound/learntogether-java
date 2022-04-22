@@ -72,4 +72,14 @@ public class PostAPI {
         }
         return ResponseEntity.ok(message);
     }
+
+    @GetMapping(value = "/api/post/all")
+    public ResponseEntity<?> getPosts(){
+        try {
+            postService.findAll();
+        } catch (Exception exception){
+
+        }
+        return ResponseEntity.ok().build();
+    }
 }
