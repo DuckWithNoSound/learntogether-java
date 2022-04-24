@@ -1,12 +1,11 @@
 package learntogether.IService;
 
-import javafx.geometry.Pos;
 import learntogether.DTO.PostDTO;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /*
   Created by Luvbert
@@ -17,5 +16,7 @@ public interface IPostService {
     PostDTO findPostById(Long postID) throws Exception;
     PostDTO updatePost(PostDTO postDTO) throws Exception;
     boolean deletePost(Long[] arrPostId) throws Exception;
-    Page<PostDTO> findAll() throws Exception;
+    List<PostDTO> findAll(Pageable pageRequest) throws Exception;
+    Long countAllPost() throws Exception;
+    Integer upOrDownScore(Long postId, Byte scoreType) throws Exception;
 }

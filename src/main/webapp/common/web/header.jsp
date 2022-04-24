@@ -79,10 +79,10 @@
                         </div>
                     </security:authorize>
                     <security:authorize access="isAnonymous()">
-                        <a id="Sign_Login">
+                        <a href="#" id="Sign_Login">
                             <label> Đăng nhập </label>
                         </a>
-                        <a href="" id="Sign_Signup">
+                        <a href="<c:url value='/welcome'/>" id="Sign_Signup">
                             <label> Đăng ký </label>
                         </a>
                     </security:authorize>
@@ -102,8 +102,8 @@
         </div>
         <nav class="Nav__mobile">
             <div class="Mobile__sign">
-                <a class="Login__mobile">Đăng nhập</a>
-                <a href="" class="Register__mobile">Đăng ký</a>
+                <a href="#" class="Login__mobile">Đăng nhập</a>
+                <a href="#" class="Register__mobile">Đăng ký</a>
             </div>
             <a href="" class="Home__mobile">Bài học</a>
             <a href="" class="Course__mobile">Tin tức</a>

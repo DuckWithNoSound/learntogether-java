@@ -40,6 +40,8 @@ public class UserDTO {
 
     private Long roleId;
 
+    private String roleName;
+
     private Timestamp createdDate;
 
     private Timestamp modifiedDate;
@@ -138,5 +140,13 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

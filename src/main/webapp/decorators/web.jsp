@@ -14,13 +14,15 @@
     <link rel="stylesheet" href="<c:url value='/assets/ASSET/fontawesome-5.15.2/css/all.min.css'/>">
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,700" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Custom stlylesheet -->
-    <link rel="stylesheet" href="<c:url value='/assets/CSS/stylesheet.css'/>">
+    <link rel="stylesheet" href="<c:url value='/assets/CSS/stylesheet.css'/>" >
     <link rel="stylesheet" href="<c:url value='/assets/CSS/style.css'/>">
     <link rel="stylesheet" href="<c:url value='/assets/CSS/personal.css'/>">
     <!-- Jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="jquery.twbsPagination.js"></script>
+    <script src="<c:url value='/assets/JS/jquery.twbsPagination.js'/>"></script>
     <!--[if lte IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>

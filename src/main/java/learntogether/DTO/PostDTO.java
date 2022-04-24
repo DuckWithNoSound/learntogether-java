@@ -19,8 +19,10 @@ public class PostDTO extends AbstractDTO{
     private String[] listTagSlug;
     private String authorName;
     private UserDTO author;
+    private List<CommentPostDTO> comments;
 
     private Long[] ids;
+
     public String getTitle() {
         return title;
     }
@@ -92,5 +94,13 @@ public class PostDTO extends AbstractDTO{
 
     public void setAuthor(UserDTO author) {
         this.author = author;
+    }
+
+    public List<CommentPostDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentPostDTO> comments) {
+        this.comments = comments;
     }
 }

@@ -23,10 +23,15 @@ public class PostEntity extends BaseEntity{
     @Column(name = "view_number")
     private Integer viewNumber;
 
+    @Column(name = "score")
+    private Integer score;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEnity user;
 
+    @OneToMany(mappedBy = "post")
+    List<CommentPostEntity> commentsPost = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name = "post_tag_mtm", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
@@ -78,5 +83,21 @@ public class PostEntity extends BaseEntity{
 
     public void setUser(UserEnity user) {
         this.user = user;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public List<CommentPostEntity> getCommentsPost() {
+        return commentsPost;
+    }
+
+    public void setCommentsPost(List<CommentPostEntity> commentsPost) {
+        this.commentsPost = commentsPost;
     }
 }

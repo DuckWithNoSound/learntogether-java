@@ -17,6 +17,14 @@ public class CommentPostEntity extends BaseEntity{
     @Column(name = "comment_score")
     private Integer score;
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private PostEntity post;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEnity user;
+
     public String getContent() {
         return content;
     }
@@ -33,4 +41,19 @@ public class CommentPostEntity extends BaseEntity{
         this.score = score;
     }
 
+    public PostEntity getPost() {
+        return post;
+    }
+
+    public void setPost(PostEntity post) {
+        this.post = post;
+    }
+
+    public UserEnity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEnity user) {
+        this.user = user;
+    }
 }

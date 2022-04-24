@@ -1,5 +1,6 @@
 package learntogether.Service;
 
+import learntogether.Converter.UserConverter;
 import learntogether.DTO.UserDTO;
 import learntogether.Entity.RoleEntity;
 import learntogether.Entity.UserEnity;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /*
   Created by Luvbert
@@ -21,10 +23,13 @@ import java.util.Map;
 @Service
 @Transactional
 public class UserService implements IUserService {
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+    private UserConverter userConverter;
+
+    public UserService(UserRepository userRepository, UserConverter userConverter){
+        this.userRepository = userRepository;
+        this.userConverter = userConverter;
+    }
 
     @Override
     public Map registerNewUserAccount(UserDTO userDTO) {
@@ -38,19 +43,7 @@ public class UserService implements IUserService {
         }
         //
         if(message.isEmpty()){
-            UserEnity userEnity = new UserEnity();
-            userEnity.setEmail(userDTO.getEmail());
-            userEnity.setUsername(userDTO.getUsername());
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            userEnity.setPassword(encoder.encode(userDTO.getPassword()));
-            userEnity.setAvatar("/assets/Uploads/Avatar/unset-icon.png");
-            userEnity.setFullname("Chưa có");
-            userEnity.setPhoneNumber("Chưa có");
-            userEnity.setUserQuote("Học tập cùng LearnTogether");
-            userEnity.setStatus(1);
-            RoleEntity role = roleRepository.findById(5l);
-            userEnity.setRole(role);
-            userRepository.save(userEnity);
+            userRepository.save(userConverter.toEntity(userDTO));
         }
         return message;
     }

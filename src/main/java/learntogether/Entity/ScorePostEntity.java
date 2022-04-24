@@ -16,6 +16,10 @@ public class ScorePostEntity {
     @Column(name = "score_type", columnDefinition = "TINYINT")
     private Byte scoreType;
 
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private PostEntity post;
+
     public Byte getScoreType() {
         return scoreType;
     }
@@ -30,5 +34,13 @@ public class ScorePostEntity {
 
     public Long getId() {
         return id;
+    }
+
+    public PostEntity getPost() {
+        return post;
+    }
+
+    public void setPost(PostEntity post) {
+        this.post = post;
     }
 }

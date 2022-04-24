@@ -19,8 +19,12 @@ import java.util.Map;
 */
 @Controller
 public class HomeController {
-    @Autowired
+
     private IUserService userService;
+
+    public HomeController(IUserService userService){
+        this.userService = userService;
+    }
 
     @GetMapping(path = "/welcome")
     public ModelAndView welcomePage(){
@@ -48,7 +52,7 @@ public class HomeController {
 
     @GetMapping(path = "/discussion")
     public ModelAndView discussionPage(){
-        ModelAndView modelAndView = new ModelAndView("news");
+        ModelAndView modelAndView = new ModelAndView("discussion");
         return modelAndView;
     }
 

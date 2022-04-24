@@ -1,15 +1,20 @@
 package learntogether.Service;
 
+import learntogether.Converter.PostConverter;
 import learntogether.DTO.PostDTO;
 import learntogether.DTO.UserDetail;
 import learntogether.Entity.PostEntity;
+import learntogether.Entity.ScorePostEntity;
 import learntogether.Entity.TagEntity;
 import learntogether.IService.IPostService;
 import learntogether.IService.ITagService;
 import learntogether.IService.IUserService;
 import learntogether.Repository.PostRepository;
+import learntogether.Repository.ScorePostRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +31,15 @@ public class PostService implements IPostService {
     private PostRepository postRepository;
     private ITagService tagService;
     private IUserService userService;
+    private PostConverter postConverter;
+    private ScorePostRepository scorePostRepository;
 
-    public PostService(PostRepository postRepository, ITagService tagService, IUserService userService){
+    public PostService(PostRepository postRepository, ITagService tagService, IUserService userService, PostConverter postConverter, ScorePostRepository scorePostRepository){
         this.postRepository = postRepository;
         this.tagService = tagService;
         this.userService = userService;
+        this.postConverter = postConverter;
+        this.scorePostRepository = scorePostRepository;
     }
 
     @Override
@@ -38,6 +47,8 @@ public class PostService implements IPostService {
         String username = ((UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         if(username == null){
             throw new Exception("User not login !");
+        } else {
+            postDTO.setAuthorName(username);
         }
         if(postDTO.getTitle() == null || postDTO.getTitle().isEmpty()){
             throw new Exception("Title is empty !");
@@ -48,47 +59,20 @@ public class PostService implements IPostService {
         if(postDTO.getListTagSlug() == null || postDTO.getListTagSlug().isEmpty()){
             throw new Exception("Tag is empty !");
         }
-        PostEntity postEntity = new PostEntity();
-        postEntity.setTitle(postDTO.getTitle());
-        postEntity.setContent(postDTO.getContent());
-        postEntity.setViewNumber(0);
-        postEntity.setCreatedDate(new Date());
-        //tags
-        List<TagEntity> tags = new ArrayList<>();
-        for(String tagSlug : postDTO.getListTagSlug()){
-            tags.add(tagService.findBySlug(tagSlug));
-        }
-        postEntity.setTags(tags);
-        //
-        postEntity.setUser(userService.findUserByUsername(username));
-        // get some hide information back to DTO
-        postDTO.setId(postRepository.save(postEntity).getId());
+
+        // save and get some hide information back to DTO
+        postDTO.setId(postRepository.save(postConverter.toEntity(postDTO)).getId());
         return postDTO;
     }
 
     @Override
     public PostDTO findPostById(Long postID) throws IllegalArgumentException, Exception {
-        PostEntity postEntity = postRepository.findOne(postID);
+        PostEntity postEntity = postRepository.getOne(postID);
         if(postEntity == null){
             throw new Exception("Post not found !");
         }
-        PostDTO postDTO = new PostDTO();
-        postDTO.setId(postEntity.getId());
-        postDTO.setTitle(postEntity.getTitle());
-        postDTO.setContent(postEntity.getContent());
-        postDTO.setAuthorName(postEntity.getUser().getUsername());
-        postDTO.setCreatedDate(postEntity.getCreatedDate());
-        postDTO.setModifiedDate(postEntity.getModifiedDate());
-        // get all tag slugs
-        List<TagEntity> tags = postEntity.getTags();
-        List<String> listTagSlug = new ArrayList<>();
-        for (int i = 0; i < tags.size(); i++) {
-            listTagSlug.add(tags.get(i).getSlug());
-        }
-        //
-        postDTO.setListTagSlug(listTagSlug);
 
-        return postDTO;
+        return postConverter.toDTO(postEntity);
     }
 
     @Override
@@ -97,7 +81,7 @@ public class PostService implements IPostService {
         if(username == null){
             throw new Exception("User not login !");
         }
-        PostEntity postEntity = postRepository.findOne(postDTO.getId());
+        PostEntity postEntity = postRepository.getOne(postDTO.getId());
         if(postEntity == null){
             throw new Exception("Source post not exist !");
         }
@@ -126,14 +110,33 @@ public class PostService implements IPostService {
             throw new Exception("Nothing to delete !");
         }
         for (int i = 0; i < arrPostId.length; i++) {
-            postRepository.delete((long)arrPostId[i]);
+            postRepository.delete(postRepository.getOne(arrPostId[i]));
         }
         return true;
     }
 
     @Override
-    public Page<PostDTO> findAll() throws Exception {
-        Page<PostEntity> page = postRepository.findAll(PageRequest.of(0, 10));
-        return null;
+    public List<PostDTO> findAll(Pageable pageRequest) throws Exception {
+
+        List<PostEntity> entities = postRepository.findAll(pageRequest).getContent();
+        List<PostDTO> dtos = new ArrayList<>();
+        for(PostEntity postEntity: entities){
+            dtos.add(postConverter.toDTO(postEntity));
+        }
+        return dtos;
+    }
+
+    @Override
+    public Long countAllPost() throws Exception {
+        return postRepository.count();
+    }
+
+    @Override
+    public Integer upOrDownScore(Long postId, Byte scoreType) throws Exception {
+        ScorePostEntity scorePostEntity = new ScorePostEntity();
+        scorePostEntity.setScoreType(scoreType);
+        scorePostEntity.setPost(postRepository.findOne(postId));
+        scorePostRepository.save(scorePostEntity);
+        return postRepository.findOne(postId).getScore();
     }
 }

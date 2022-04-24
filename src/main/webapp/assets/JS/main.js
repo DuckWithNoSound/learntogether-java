@@ -9,6 +9,7 @@ let btn_login_mobile = document.querySelector('.Login__mobile');
 let btn_invite_1 = document.querySelector('.Bride_two-btn');
 let btn_invite_2 = document.querySelector('.Bride_last-content a');
 let btn_login_1 = document.querySelector('#logIn_btn');
+let btn_discussion_login = document.querySelector('#discussion_login');
 
 
 nav_mobile_btn_bars.onclick = function(){
@@ -42,6 +43,13 @@ btn_login_mobile.onclick = function(){
 if(btn_login != null)
 {
   btn_login.onclick = function(event){
+    modal.setAttribute('style', 'display: flex;');
+    event.stopPropagation();
+  }
+}
+if(btn_discussion_login != null)
+{
+  btn_discussion_login.onclick = function (event){
     modal.setAttribute('style', 'display: flex;');
     event.stopPropagation();
   }
@@ -148,6 +156,7 @@ function errorForm() {
   alert("Chức năng này hiện đang bảo trì, vui lòng thử lại sau !");
   return false;
 }
+
 function searchContent(content)
 {
   // still not working
