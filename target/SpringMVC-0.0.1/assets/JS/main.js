@@ -10,7 +10,9 @@ let btn_invite_1 = document.querySelector('.Bride_two-btn');
 let btn_invite_2 = document.querySelector('.Bride_last-content a');
 let btn_login_1 = document.querySelector('#logIn_btn');
 let btn_discussion_login = document.querySelector('#discussion_login');
-
+//
+let hrefLocation = location.origin + "/SpringMVC_war";
+//
 
 nav_mobile_btn_bars.onclick = function(){
   nav_mobile_btn_bars.setAttribute('style', 'display: none;');
@@ -103,6 +105,21 @@ if( document.querySelector('.home__news__new__btn') != null)
   }
 }
 // FUNCTION
+function getUrlParameter(sParam) {
+  let sPageURL = window.location.search.substring(1),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+
+  for (i = 0; i < sURLVariables.length; i++) {
+    sParameterName = sURLVariables[i].split('=');
+
+    if (sParameterName[0] === sParam) {
+      return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+    }
+  }
+  return false;
+};
 function loginAPI(){
   let jsonData = convertFormToJson($('#loginForm'))
   $.ajax({

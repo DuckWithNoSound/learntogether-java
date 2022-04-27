@@ -1,13 +1,14 @@
 package learntogether.Controller;
 
 import learntogether.DTO.UserDTO;
+import learntogether.IService.IPostService;
 import learntogether.IService.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -21,9 +22,11 @@ import java.util.Map;
 public class HomeController {
 
     private IUserService userService;
+    private IPostService postService;
 
-    public HomeController(IUserService userService){
+    public HomeController(IUserService userService, IPostService postService){
         this.userService = userService;
+        this.postService = postService;
     }
 
     @GetMapping(path = "/welcome")
@@ -53,6 +56,24 @@ public class HomeController {
     @GetMapping(path = "/discussion")
     public ModelAndView discussionPage(){
         ModelAndView modelAndView = new ModelAndView("discussion");
+        return modelAndView;
+    }
+
+    @GetMapping(path = "/discussion/post/create")
+    public ModelAndView createPostPage(){
+        ModelAndView modelAndView = new ModelAndView("posteditor");
+        return modelAndView;
+    }
+
+    @GetMapping(path = "/discussion/post/edit")
+    public ModelAndView editPostPage(@RequestParam(value = "postid") Long postId) {
+        ModelAndView modelAndView = new ModelAndView("posteditor");
+        return modelAndView;
+    }
+
+    @GetMapping(path = "/post/*")
+    public ModelAndView postPage(){
+        ModelAndView modelAndView = new ModelAndView("post");
         return modelAndView;
     }
 

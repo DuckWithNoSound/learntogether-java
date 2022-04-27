@@ -20,7 +20,7 @@ public class TagEntity{
     @Column(name = "tag_slug")
     private String slug;
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tags", fetch = FetchType.LAZY)
     private List<PostEntity> posts = new ArrayList<>();
 
     public Long getId() {

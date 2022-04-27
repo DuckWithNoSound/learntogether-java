@@ -15,6 +15,10 @@ public class CommentPostDTO extends AbstractDTO{
     private Long postId;
     private PostEntity post;
     private String authorName;
+    private String authorRole;
+    private String authorAvatar;
+
+    private Long[] ids;
 
     public String getContent() {
         return content;
@@ -54,5 +58,29 @@ public class CommentPostDTO extends AbstractDTO{
 
     public void setAuthorName(String authorName) {
         this.authorName = authorName;
+    }
+
+    public String getAuthorRole() {
+        return authorRole;
+    }
+
+    public void setAuthorRole(String authorRole) {
+        this.authorRole = authorRole;
+    }
+
+    public String getAuthorAvatar() {
+        return authorAvatar;
+    }
+
+    public void setAuthorAvatar(String authorAvatar) {
+        this.authorAvatar = authorAvatar;
+    }
+
+    public Long[] getIds() {
+        return ids;
+    }
+
+    public void setIds(Long[] ids) {
+        this.ids = ids;
     }
 }

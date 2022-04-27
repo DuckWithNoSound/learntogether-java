@@ -1031,8 +1031,8 @@ footer{
     justify-content: space-between;
     align-items: center;
     flex-direction: column;
-    height: 660px;
-    width: 85%;
+    height: 785px;
+    width: 100%;
 }
 .shares__content--cover{
     width: 100%;
@@ -1041,11 +1041,12 @@ footer{
 }
 .shares__content__block_1, .shares__content__block_2, .shares__content__block_3 {
     width: 100%;
-    height: 31.5%;
+    height: 31.2%;
     background-color: var(--whiteColor);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: 0 20px 0 20px;
 }
 .shares__content__block_3{
     margin-bottom: 8px;
@@ -1323,7 +1324,7 @@ footer{
     align-items: center;
     background-color: var(--whiteColor);
     padding: 5px;
-    height: 210px;
+    height: 250px;
     border-radius: 0px 20px 0px 20px;
 }
 .share__content__one{
@@ -1381,7 +1382,7 @@ footer{
     font-size: 1.55rem;
     height: 15%;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
 }
 .share__block__detail > *{
     margin-right: 18px;
@@ -1393,13 +1394,18 @@ footer{
     align-content: center;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
-
 .discussion__block__content__second{
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+.discussion__block__content__third{
     background-color: #e6f0ff;
     height: 80%;
     padding: 2px 8px;
+    border-radius: 4px;
 }
 .discussion__order{
     display: flex;
@@ -1690,7 +1696,7 @@ footer{
     display: flex;
     align-items: flex-start;
 }
-.textarea{
+.textarea__container{
     width: auto; 
     min-width:100%; 
     height: 350px; 
@@ -1790,11 +1796,15 @@ footer{
     align-content: center;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid var(--grayColor);
 }
 .post__block__content__first > label{
-    width: 90%;
+    width: 100%;
     font-size: 2.3rem;
     line-height: 3.5rem;
+}
+.post__block__content__second{
+    padding: 18px 0;
 }
 .dropdownBtn__postblock{
     background-color: var(--whiteColor);
@@ -1864,7 +1874,7 @@ footer{
     margin-top: 15px;
 }
 .post__block__detail label{
-    margin-right: 15px;
+    margin-right: 30px;
 }
 
 .post__bridge{
@@ -1932,7 +1942,7 @@ footer{
     align-content: flex-start;
     justify-content: space-between;
     align-items: flex-start;
-    margin: 15px;
+    padding: 15px;
     border-bottom: solid 1px var(--grayColor);
 }
 .post__comment__block__first{
@@ -1952,6 +1962,7 @@ footer{
     align-items: center;
     font-size: 1.35rem;
     color: var(--textColor);
+    margin-bottom: 15px;
 }
 .comment__block__second__one > img {
     margin-right: 15px;

@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public class PostAPI {
 
     @GetMapping(value = "/api/post/{postId}")
     public ResponseEntity<?> getPost(@PathVariable(name = "postId") Long postId){
+
         PostDTO foundPost;
         try{
             foundPost = postService.findPostById(postId);
@@ -45,7 +47,7 @@ public class PostAPI {
             savedPost = postService.createNewPost(postDTO);
         } catch (Exception exception){
             Map<String, String> message = new HashMap<>();
-            message.put("Message", "Update failed: " + exception.getMessage());
+            message.put("Message", "Create failed: " + exception.getMessage());
             return ResponseEntity.ok(message);
         }
         return ResponseEntity.ok(savedPost);
@@ -59,6 +61,7 @@ public class PostAPI {
         } catch (Exception exception){
             Map<String, String> message = new HashMap<>();
             message.put("Message", "Update failed: " + exception.getMessage());
+            exception.printStackTrace();
             return ResponseEntity.ok(message);
         }
         return ResponseEntity.ok(savedPost);
@@ -129,12 +132,39 @@ public class PostAPI {
         }
     }
 
+    @GetMapping(value = "/api/post/score/currently")
+    public ResponseEntity<?> getCurrentVote(@RequestParam(value = "postid") Long postId){
+        Map<String, Byte> response = new HashMap<>();
+        try{
+            response.put("currentVote", postService.getCurrentScoreVote(postId));
+            return ResponseEntity.ok(response);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            Map<String, String> message = new HashMap<>();
+            message.put("Message", "Failed: " + exception.getMessage());
+            return ResponseEntity.ok(message);
+        }
+    }
+
     @GetMapping(value = "/api/post/score")
     public ResponseEntity<?> upOrDownScorePost(@RequestParam(value = "postid") Long postId, @RequestParam(value = "scoretype", required = false) Byte scoreType){
         Map<String, Integer> response = new HashMap<>();
         try{
             if(scoreType == null) scoreType = 1;
             response.put("score", postService.upOrDownScore(postId, scoreType));
+            return ResponseEntity.ok(response);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            Map<String, String> message = new HashMap<>();
+            message.put("Message", "Failed: " + exception.getMessage());
+            return ResponseEntity.ok(message);
+        }
+    }
+    @GetMapping(value = "/api/post/view")
+    public ResponseEntity<?> upViewPost(@RequestParam(value = "postid") Long postId){
+        Map<String, Integer> response = new HashMap<>();
+        try{
+            response.put("score", postService.upView(postId));
             return ResponseEntity.ok(response);
         } catch (Exception exception) {
             exception.printStackTrace();

@@ -19,4 +19,6 @@ public interface IPostService {
     List<PostDTO> findAll(Pageable pageRequest) throws Exception;
     Long countAllPost() throws Exception;
     Integer upOrDownScore(Long postId, Byte scoreType) throws Exception;
+    Integer upView(Long postId) throws Exception;
+    Byte getCurrentScoreVote(Long postId) throws Exception;
 }

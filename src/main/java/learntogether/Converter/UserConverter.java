@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
   Created by Luvbert
 */
 @Component
-public class UserConverter {
+public class UserConverter implements IConverter<UserDTO, UserEnity> {
 
     private RoleRepository roleRepository;
 
@@ -19,6 +19,7 @@ public class UserConverter {
         this.roleRepository = roleRepository;
     }
 
+    @Override
     public UserDTO toDTO(UserEnity userEnity){
         UserDTO userDTO = new UserDTO();
 
@@ -33,6 +34,7 @@ public class UserConverter {
 
         return userDTO;
     }
+
     public UserDTO toDTOSecure(UserEnity userEnity){
         UserDTO userDTO = new UserDTO();
 
@@ -46,6 +48,7 @@ public class UserConverter {
         return userDTO;
     }
 
+    @Override
     public UserEnity toEntity(UserDTO userDTO){
         UserEnity userEnity = new UserEnity();
 

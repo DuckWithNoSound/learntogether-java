@@ -81,7 +81,7 @@ public class PostService implements IPostService {
         if(username == null){
             throw new Exception("User not login !");
         }
-        PostEntity postEntity = postRepository.getOne(postDTO.getId());
+        PostEntity postEntity = postRepository.findOne(postDTO.getId());
         if(postEntity == null){
             throw new Exception("Source post not exist !");
         }
@@ -89,15 +89,17 @@ public class PostService implements IPostService {
         if(postDTO.getContent() != null) postEntity.setContent(postDTO.getContent());
         postEntity.setModifiedDate(new Date());
         // convert tag slug to tag entity
-        List<TagEntity> tags = new ArrayList<>();
-        for(String tagSlug : postDTO.getListTagSlug()){
-            tags.add(tagService.findBySlug(tagSlug));
+        if(postDTO.getListTagSlug() != null){
+            List<TagEntity> tags = new ArrayList<>();
+            for(String tagSlug : postDTO.getListTagSlug()){
+                tags.add(tagService.findBySlug(tagSlug));
+            }
+            postEntity.setTags(tags);
         }
-        postEntity.setTags(tags);
+
         postEntity.setUser(userService.findUserByUsername(username));
-        // get some hide information back to DTO
-        postDTO.setId(postRepository.save(postEntity).getId());
-        return postDTO;
+        postRepository.save(postEntity);
+        return postConverter.toDTO(postRepository.findOne(postEntity.getId()));
     }
 
     @Override
@@ -132,11 +134,52 @@ public class PostService implements IPostService {
     }
 
     @Override
+    public Byte getCurrentScoreVote(Long postId) throws Exception {
+        UserDetail user = ((UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        ScorePostEntity scorePostEntity = scorePostRepository.findByPostIdAndUserId(postId, user.getId());
+        if(scorePostEntity == null){
+            return 0;
+        } else {
+            return scorePostEntity.getScoreType();
+        }
+    }
+
+    @Override
     public Integer upOrDownScore(Long postId, Byte scoreType) throws Exception {
-        ScorePostEntity scorePostEntity = new ScorePostEntity();
-        scorePostEntity.setScoreType(scoreType);
-        scorePostEntity.setPost(postRepository.findOne(postId));
-        scorePostRepository.save(scorePostEntity);
-        return postRepository.findOne(postId).getScore();
+        PostEntity postEntity = postRepository.findOne(postId);
+        UserDetail user = ((UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        ScorePostEntity scorePostEntity = scorePostRepository.findByPostIdAndUserId(postId, user.getId());
+        if(scorePostEntity != null){
+            if(scorePostEntity.getScoreType() == 1 && scoreType == -1){
+                scorePostEntity.setScoreType((byte) -1);
+                scorePostRepository.save(scorePostEntity);
+                return (postEntity.getScore()-2);
+            } else if (scorePostEntity.getScoreType() == -1 && scoreType == 1){
+                scorePostEntity.setScoreType((byte) 1);
+                scorePostRepository.save(scorePostEntity);
+                return (postEntity.getScore()+2);
+            } else {
+                return postEntity.getScore();
+            }
+        } else {
+            scorePostEntity = new ScorePostEntity();
+            scorePostEntity.setScoreType(scoreType);
+            scorePostEntity.setPost(postEntity);
+            scorePostEntity.setUser(userService.findUserByUsername(user.getUsername()));
+            scorePostRepository.save(scorePostEntity);
+            if(scoreType == 1){
+                return (postEntity.getScore()+1);
+            } else {
+                return (postEntity.getScore()-1);
+            }
+        }
+    }
+
+    @Override
+    public Integer upView(Long postId) throws Exception {
+        PostEntity postEntity = postRepository.findOne(postId);
+        Integer viewNumber = postEntity.getViewNumber() + 1;
+        postEntity.setViewNumber(viewNumber);
+        return postRepository.save(postEntity).getScore();
     }
 }

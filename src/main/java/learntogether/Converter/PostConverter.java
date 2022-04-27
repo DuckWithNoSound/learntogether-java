@@ -17,7 +17,7 @@ import java.util.List;
   Created by Luvbert
 */
 @Component
-public class PostConverter {
+public class PostConverter implements IConverter<PostDTO, PostEntity> {
 
     private ITagService tagService;
     private IUserService userService;
@@ -31,6 +31,7 @@ public class PostConverter {
         this.commentPostConverter = commentPostConverter;
     }
 
+    @Override
     public PostDTO toDTO(PostEntity postEntity){
         PostDTO postDTO = new PostDTO();
         postDTO.setId(postEntity.getId());
@@ -59,6 +60,8 @@ public class PostConverter {
         postDTO.setComments(commentPostDTOS);
         return postDTO;
     }
+
+    @Override
     public PostEntity toEntity(PostDTO postDTO){
         PostEntity postEntity = new PostEntity();
         postEntity.setTitle(postDTO.getTitle());

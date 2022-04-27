@@ -218,37 +218,47 @@
             <h2 class="title" style="text-align: center;">Thảo luận</h2>
             <div class="shares__content--cover">
                 <div class="shares__content">
-                    <!--
-                    <?php for($i = 0; $i<$numsPost; $i++): ?>
-                    <div class="shares__content__block_1">
-                        <div class="shares__content__one">
-                            <img src="<?php echo base_url($topPosts[$i]->avatar) ?>" alt="">
-                            <label for="" class="user_level"><?php echo $topPosts[$i]->level_name ?></label>
-                            <div class="UpAndDown">
-                                <i class="fas fa-caret-up <?php if($topPosts[$i]->currentVote == 1) echo " isActive" ?>"></i>
-                                <label for=""><?php echo($topPosts[$i]->score) ?></label>
-                                <i class="fas fa-caret-down <?php if($topPosts[$i]->currentVote == -1) echo " isActive" ?>"></i>
-                            </div>
-                        </div>
-                        <div class="shares__content__two">
-                            <div class="shares__block__content">
-                                <a href="<?php echo base_url('Discussion/post/'.$topPosts[$i]->post_id) ?>"><?php echo $topPosts[$i]->title ?></a>
-                                <div>
-                                    <?php echo $topPosts[$i]->content ?>
-                                </div>
-                            </div>
-                            <div class="shares__block__detail">
-                                <label for="">Tác giả: <?php echo $topPosts[$i]->username ?></label>
-                                <label for="">Ngày đăng: <?php echo date("d/m/Y", strtotime($topPosts[$i]->first_date)) ?></label>
-                                <i class="far fa-comment-dots">7</i>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endfor ?>
-                    -->
-                    <a href="" class="see_all">Xem thêm</a>
+                    <!-- data will fetch here -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function (){
+        let apiUrl = "<c:url value='/api/post/all'/>" + "?page=1" + "&size=3" + "&sort=score" + "&dir=desc";
+        $.ajax({
+            url: apiUrl,
+            type: "GET",
+            dataType: "json"
+        }).done(function (result){
+            appendPosts(result);
+        });
+    })
+    function appendPosts(posts){
+        let hrefLocation = location.origin + "/SpringMVC_war";
+        $.each(posts, function (key, value) {
+            let createdDate = new Date(value.createdDate);
+            let dateString = createdDate.getDate() + "/" + createdDate.getMonth() + "/" + createdDate.getFullYear();
+            $(".shares__content").append("<div class='shares__content__block_1'><div class='share__content__one post" + key + "'></div><div class='share__content__two post" + key + "'></div></div>");
+            $(".share__content__one.post" + key).append("<img src='" + hrefLocation + value.author.avatar + "' class='img__avatar__82'>");
+            $(".share__content__one.post" + key).append("<label class='user_level'>" + value.author.roleName + "</label>");
+            $(".share__content__one.post" + key).append("<div class='UpAndDown'><i class='fas fa-caret-up'></i><label>" + value.score + "</label><i class='fas fa-caret-down'></i>");
+            $(".share__content__two.post" + key).append("<div class='share__block__content'><div class='discussion__block__content__fisrt'><a href='" + hrefLocation + "/post/" + value.id + "'>" + value.title + "</a></div><div class='discussion__block__content__second'>" + listTagToString(value.listTagSlug) + "</div><div class='discussion__block__content__third'><pre wrap='true'>" + value.content + "</pre></div></div>");
+            $(".share__content__two.post" + key).append("<div class='share__block__detail'><label>Tác giả: <a class='link__profile' href=''>" + value.author.username + "</a></label><label>Ngày đăng: " + dateString + "</label><label><a href='" + hrefLocation + "/post/" + value.id + "'><i class='far fa-comment-dots'></i>" + value.comments.length + "</a></label><label><i class='far fa-eye'></i>" + value.viewNumber + "</label></div>");
+        });
+
+        $(".shares__content").append("<a href='" + hrefLocation + "/discussion" + "' class='see_all'>Xem thêm</a>");
+    }
+    function listTagToString(data){
+        let tagsString = "Tags: ";
+        $.each(data, function (key, value){
+            if(key == 0){
+                tagsString += value;
+            } else {
+                tagsString += (", " + value);
+            }
+        })
+        return tagsString;
+    }
+</script>

@@ -16,8 +16,9 @@ import javax.persistence.Column;
 */
 @Component
 @Scope("prototype")
-public class CommentPostConverter {
+public class CommentPostConverter implements IConverter<CommentPostDTO, CommentPostEntity> {
 
+    @Override
     public CommentPostDTO toDTO(CommentPostEntity entity){
         CommentPostDTO dto = new CommentPostDTO();
         dto.setId(entity.getId());
@@ -27,8 +28,16 @@ public class CommentPostConverter {
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setModifiedDate(entity.getModifiedDate());
         dto.setAuthorName(entity.getUser().getUsername());
+        dto.setAuthorAvatar(entity.getUser().getAvatar());
+        dto.setAuthorRole(entity.getUser().getRole().getRoleName());
         return dto;
     }
+
+    @Override
+    public CommentPostEntity toEntity(CommentPostDTO dto) {
+        return null;
+    }
+
     /*
     public CommentPostEntity toEntity(CommentPostDTO dto) throws Exception {
         CommentPostEntity entity = new CommentPostEntity();

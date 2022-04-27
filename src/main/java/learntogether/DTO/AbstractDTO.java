@@ -12,12 +12,6 @@ public class AbstractDTO {
     private Date createdDate;
     private Date modifiedDate;
 
-    public boolean isExist()
-    {
-        if(id != null) return true;
-        return false;
-    }
-
     public long getId() {
         return id;
     }

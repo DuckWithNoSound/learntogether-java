@@ -72,6 +72,7 @@ public class PostDTO extends AbstractDTO{
     }
 
     public List<String> getListTagSlug() {
+        if(listTagSlug == null) return null;
         List<String> list = Arrays.asList(listTagSlug);
         return list;
     }

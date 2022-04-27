@@ -20,6 +20,10 @@ public class ScorePostEntity {
     @JoinColumn(name = "post_id")
     private PostEntity post;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEnity user;
+
     public Byte getScoreType() {
         return scoreType;
     }
@@ -42,5 +46,13 @@ public class ScorePostEntity {
 
     public void setPost(PostEntity post) {
         this.post = post;
+    }
+
+    public void setUser(UserEnity user) {
+        this.user = user;
+    }
+
+    public UserEnity getUser() {
+        return user;
     }
 }

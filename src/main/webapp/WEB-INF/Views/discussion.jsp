@@ -21,16 +21,16 @@
                 </security:authorize>
                 <security:authorize access="isAuthenticated()">
                 <div class="share__create">
-                    <a href="">+ Viết bài thảo luận mới</a>
+                    <a href="<c:url value="/discussion/post/create"/>">+ Viết bài thảo luận mới</a>
                 </div>
                 </security:authorize>
             </div>
 
             <div class="discussion__order">
                 <div class="discussion__orderby btn-group btn-group-toggle" data-toggle="buttons">
-                    <label id="viewNumber" class="btn btn-secondary discussion__orderby__btn" onclick="changeSortBy(this)">Nổi bật</label>
+                    <label id="viewNumber" class="btn btn-secondary discussion__orderby__btn active" onclick="changeSortBy(this)">Nổi bật</label>
                     <label id="score" class="btn btn-secondary discussion__orderby__btn" onclick="changeSortBy(this)">Điểm cao</label>
-                    <label id="id" class="btn btn-secondary discussion__orderby__btn active" onclick="changeSortBy(this)">Mới nhất</label>
+                    <label id="id" class="btn btn-secondary discussion__orderby__btn" onclick="changeSortBy(this)">Mới nhất</label>
                 </div>
                 <div class="discussion__orderdir">
                     <label id="desc" class="btn btn-light active" onclick="changeSortDir(this)"><i class="fas fa-sort-amount-down"></i></label>
@@ -49,7 +49,7 @@
     </div>
 </div>
 <script>
-    let currentSortBy = "id";
+    let currentSortBy = "viewNumber";
     let currentSortDir = "desc";
     let test;
     $(document).ready(function (){
@@ -106,8 +106,20 @@
             $(".share__content__one.post" + key).append("<img src='" + hrefLocation + value.author.avatar + "' class='img__avatar__82'>");
             $(".share__content__one.post" + key).append("<label class='user_level'>" + value.author.roleName + "</label>");
             $(".share__content__one.post" + key).append("<div class='UpAndDown'><i class='fas fa-caret-up'></i><label>" + value.score + "</label><i class='fas fa-caret-down'></i>");
-            $(".share__content__two.post" + key).append("<div class='share__block__content'><div class='discussion__block__content__fisrt'><a href='" + value.id + "'>" + value.title + "</a></div><div class='discussion__block__content__second'><pre wrap='true'>" + value.content + "</pre></div></div>");
-            $(".share__content__two.post" + key).append("<div class='share__block__detail'><label>Tác giả: <a class='link__profile' href=''>" + value.author.username + "</a></label><label>Ngày đăng: " + dateString + "</label><label><a href='" + value.id + "'><i class='far fa-comment-dots'></i>" + value.comments.length + "</a></label><label><i class='far fa-eye'></i>" + value.viewNumber + "</label></div>");
+            $(".share__content__two.post" + key).append("<div class='share__block__content'><div class='discussion__block__content__fisrt'><a href='" + hrefLocation + "/post/" + value.id + "'>" + value.title + "</a></div><div class='discussion__block__content__second'>" + listTagToString(value.listTagSlug) + "</div><div class='discussion__block__content__third'><pre wrap='true'>" + value.content + "</pre></div></div>");
+            $(".share__content__two.post" + key).append("<div class='share__block__detail'><label>Tác giả: <a class='link__profile' href=''>" + value.author.username + "</a></label><label>Ngày đăng: " + dateString + "</label><label><a href='" + hrefLocation + "/post/" + value.id + "'><i class='far fa-comment-dots'></i>" + value.comments.length + "</a></label><label><i class='far fa-eye'></i>" + value.viewNumber + "</label></div>");
         });
+    }
+
+    function listTagToString(data){
+        let tagsString = "Tags: ";
+        $.each(data, function (key, value){
+            if(key == 0){
+                tagsString += value;
+            } else {
+                tagsString += (", " + value);
+            }
+        })
+        return tagsString;
     }
 </script>

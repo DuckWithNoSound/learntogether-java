@@ -167,7 +167,22 @@ ALTER TABLE `news_tag_mtm` ADD CONSTRAINT fk_mtm_to_tag_for_news FOREIGN KEY (`t
 -- Tính điểm của từng bài viết rồi cập nhật dữ liệu vào từng cột điểm của bài viết tương ứng:
 -- 2 bảng: scores(`score_type`, `user_id`, `post_id`), posts(`post_id`, `score`)
 DELIMITER $$
-CREATE TRIGGER update_score
+CREATE TRIGGER update_PostScore_when_update
+AFTER UPDATE
+ON `score` for each row
+BEGIN 
+	DECLARE up INT;
+	DECLARE down INT;
+	DECLARE score INT;
+	SET up  = (SELECT COUNT(`user_id`) FROM `score` WHERE `score_type` = 1 AND `post_id` = new.`post_id`);
+	SET down = (SELECT COUNT(`user_id`) FROM `score` WHERE `score_type` = -1 AND `post_id` = new.`post_id`);
+	SET score = up - down;
+	UPDATE `post` SET `score`= score WHERE `id` = new.`post_id`;
+END$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE TRIGGER update_PostScore_when_insert
 AFTER INSERT
 ON `score` for each row
 BEGIN 
@@ -182,8 +197,8 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE TRIGGER update_score_of_comment_post
-AFTER INSERT
+CREATE TRIGGER update_score_of_comment_post_when_update
+AFTER UPDATE
 ON `score_of_comment_post` for each row
 BEGIN 
 	DECLARE up INT;
@@ -196,6 +211,20 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER update_score_of_comment_post_when_insert
+AFTER INSERT
+ON `score_of_comment_post` for each row
+BEGIN 
+	DECLARE up INT;
+	DECLARE down INT;
+	DECLARE score INT;
+	SET up  = (SELECT COUNT(`user_id`) FROM `score_of_comment_post` WHERE `score_type` = 1 AND `comment_post_id` = new.`comment_post_id`);
+	SET down = (SELECT COUNT(`user_id`) FROM `score_of_comment_post` WHERE `score_type` = -1 AND `comment_post_id` = new.`comment_post_id`);
+	SET score = up - down;
+	UPDATE `comment_post` SET `score`= score WHERE `id` = new.`comment_post_id`;
+END$$
+DELIMITER ;
 -- insert data --
 
 INSERT INTO `role` (`id`, `role_name`) VALUES
