@@ -2,11 +2,12 @@ package learntogether.Service;
 
 import learntogether.Converter.CommentPostConverter;
 import learntogether.DTO.CommentPostDTO;
-import learntogether.Entity.CommentPostEntity;
-import learntogether.Entity.UserEnity;
+import learntogether.DTO.UserDetail;
+import learntogether.Entity.*;
 import learntogether.IService.ICommentPostService;
 import learntogether.Repository.CommentPostRepository;
 import learntogether.Repository.PostRepository;
+import learntogether.Repository.ScoreOfCommentPostRepository;
 import learntogether.Repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,16 @@ public class CommentPostService implements ICommentPostService {
     private UserRepository userRepository;
     private CommentPostConverter commentPostConverter;
     private CommentPostRepository commentPostRepository;
+    private ScoreOfCommentPostRepository scoreOfCommentPostRepository;
 
-    public CommentPostService(PostRepository postRepository, UserRepository userRepository, CommentPostConverter commentPostConverter, CommentPostRepository commentPostRepository){
+    public CommentPostService(PostRepository postRepository, UserRepository userRepository,
+                              CommentPostConverter commentPostConverter, CommentPostRepository commentPostRepository,
+                              ScoreOfCommentPostRepository scoreOfCommentPostRepository){
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.commentPostConverter = commentPostConverter;
         this.commentPostRepository = commentPostRepository;
+        this.scoreOfCommentPostRepository = scoreOfCommentPostRepository;
     }
 
     @Override
@@ -58,5 +63,47 @@ public class CommentPostService implements ICommentPostService {
     @Override
     public CommentPostDTO deleteCommentPost(Long[] ids) throws Exception {
         return null;
+    }
+
+    @Override
+    public Byte getCurrentScoreVote(Long commentPostId) throws Exception {
+        UserDetail user = ((UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        ScoreOfCommentPostEntity entity = scoreOfCommentPostRepository.findByCommentPostIdAndUserId(commentPostId, user.getId());
+        if(entity == null){
+            return 0;
+        } else {
+            return entity.getScoreType();
+        }
+    }
+
+    @Override
+    public Integer upOrDownScore(Long commentPostId, Byte scoreType) throws Exception {
+        CommentPostEntity commentPostEntity = commentPostRepository.findOne(commentPostId);
+        UserDetail user = ((UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        ScoreOfCommentPostEntity scoreOfCommentPostEntity = scoreOfCommentPostRepository.findByCommentPostIdAndUserId(commentPostId, user.getId());
+        if(scoreOfCommentPostEntity != null){
+            if(scoreOfCommentPostEntity.getScoreType() == 1 && scoreType == -1){
+                scoreOfCommentPostEntity.setScoreType((byte) -1);
+                scoreOfCommentPostRepository.save(scoreOfCommentPostEntity);
+                return (commentPostEntity.getScore()-2);
+            } else if (scoreOfCommentPostEntity.getScoreType() == -1 && scoreType == 1){
+                scoreOfCommentPostEntity.setScoreType((byte) 1);
+                scoreOfCommentPostRepository.save(scoreOfCommentPostEntity);
+                return (commentPostEntity.getScore()+2);
+            } else {
+                return commentPostEntity.getScore();
+            }
+        } else {
+            scoreOfCommentPostEntity = new ScoreOfCommentPostEntity();
+            scoreOfCommentPostEntity.setScoreType(scoreType);
+            scoreOfCommentPostEntity.setCommentPost(commentPostEntity);
+            scoreOfCommentPostEntity.setUser(userRepository.findByUsername(user.getUsername()));
+            scoreOfCommentPostRepository.save(scoreOfCommentPostEntity);
+            if(scoreType == 1){
+                return (commentPostEntity.getScore()+1);
+            } else {
+                return (commentPostEntity.getScore()-1);
+            }
+        }
     }
 }

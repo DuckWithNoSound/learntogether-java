@@ -12,7 +12,8 @@ import java.util.Map;
 @Service
 public interface IUserService {
     Map registerNewUserAccount(UserDTO userDTO);
-    UserEnity findUserByUsername(String username);
+    UserDTO findUserByUsername(String username);
+    UserDTO findUserByUserId(Long userId);
     boolean isEmailExist(String email);
     boolean isUsernameExist(String username);
     boolean isUsernameAndPasswordMatch(String username, String password);

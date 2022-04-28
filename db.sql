@@ -207,7 +207,7 @@ BEGIN
 	SET up  = (SELECT COUNT(`user_id`) FROM `score_of_comment_post` WHERE `score_type` = 1 AND `comment_post_id` = new.`comment_post_id`);
 	SET down = (SELECT COUNT(`user_id`) FROM `score_of_comment_post` WHERE `score_type` = -1 AND `comment_post_id` = new.`comment_post_id`);
 	SET score = up - down;
-	UPDATE `comment_post` SET `score`= score WHERE `id` = new.`comment_post_id`;
+	UPDATE `comment_post` SET `comment_score`= score WHERE `id` = new.`comment_post_id`;
 END$$
 DELIMITER ;
 
@@ -222,7 +222,7 @@ BEGIN
 	SET up  = (SELECT COUNT(`user_id`) FROM `score_of_comment_post` WHERE `score_type` = 1 AND `comment_post_id` = new.`comment_post_id`);
 	SET down = (SELECT COUNT(`user_id`) FROM `score_of_comment_post` WHERE `score_type` = -1 AND `comment_post_id` = new.`comment_post_id`);
 	SET score = up - down;
-	UPDATE `comment_post` SET `score`= score WHERE `id` = new.`comment_post_id`;
+	UPDATE `comment_post` SET `comment_score`= score WHERE `id` = new.`comment_post_id`;
 END$$
 DELIMITER ;
 -- insert data --

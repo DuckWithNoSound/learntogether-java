@@ -59,4 +59,33 @@ public class CommentPostAPI {
         }
         return ResponseEntity.ok(message);
     }
+
+    @GetMapping(value = "/api/commentpost/score/currently")
+    public ResponseEntity<?> getCurrentVote(@RequestParam(value = "commentpostid") Long commentPostId){
+        Map<String, Byte> response = new HashMap<>();
+        try{
+            response.put("currentVote", commentPostService.getCurrentScoreVote(commentPostId));
+            return ResponseEntity.ok(response);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            Map<String, String> message = new HashMap<>();
+            message.put("Message", "Failed: " + exception.getMessage());
+            return ResponseEntity.ok(message);
+        }
+    }
+
+    @GetMapping(value = "/api/commentpost/score")
+    public ResponseEntity<?> upDownScoreCommentPost(@RequestParam(value = "commentpostid")Long commentPostId, @RequestParam(value = "scoretype")Byte scoreType){
+        Map<String, Integer> response = new HashMap<>();
+        try {
+            if(scoreType == null || scoreType != -1) scoreType = 1;
+            response.put("score", commentPostService.upOrDownScore(commentPostId, scoreType));
+            return ResponseEntity.ok(response);
+        } catch (Exception exception){
+            Map<String, String> message = new HashMap<>();
+            message.put("Message", "Vote failed: " + exception.getMessage());
+            exception.printStackTrace();
+            return ResponseEntity.ok(message);
+        }
+    }
 }

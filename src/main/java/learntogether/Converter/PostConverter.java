@@ -7,6 +7,7 @@ import learntogether.Entity.PostEntity;
 import learntogether.Entity.TagEntity;
 import learntogether.IService.ITagService;
 import learntogether.IService.IUserService;
+import learntogether.Repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,13 +21,13 @@ import java.util.List;
 public class PostConverter implements IConverter<PostDTO, PostEntity> {
 
     private ITagService tagService;
-    private IUserService userService;
+    private UserRepository userRepository;
     private UserConverter userConverter;
     private CommentPostConverter commentPostConverter;
 
-    public PostConverter(ITagService tagService, IUserService userService, UserConverter userConverter, CommentPostConverter commentPostConverter){
+    public PostConverter(ITagService tagService, UserRepository userRepository, UserConverter userConverter, CommentPostConverter commentPostConverter){
         this.tagService = tagService;
-        this.userService = userService;
+        this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.commentPostConverter = commentPostConverter;
     }
@@ -78,7 +79,7 @@ public class PostConverter implements IConverter<PostDTO, PostEntity> {
         }
         postEntity.setTags(tags);
         //
-        postEntity.setUser(userService.findUserByUsername(postDTO.getAuthorName()));
+        postEntity.setUser(userRepository.findByUsername(postDTO.getAuthorName()));
         return postEntity;
     }
 }

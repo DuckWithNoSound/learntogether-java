@@ -107,7 +107,7 @@
             $(".share__content__one.post" + key).append("<label class='user_level'>" + value.author.roleName + "</label>");
             $(".share__content__one.post" + key).append("<div class='UpAndDown'><i class='fas fa-caret-up'></i><label>" + value.score + "</label><i class='fas fa-caret-down'></i>");
             $(".share__content__two.post" + key).append("<div class='share__block__content'><div class='discussion__block__content__fisrt'><a href='" + hrefLocation + "/post/" + value.id + "'>" + value.title + "</a></div><div class='discussion__block__content__second'>" + listTagToString(value.listTagSlug) + "</div><div class='discussion__block__content__third'><pre wrap='true'>" + value.content + "</pre></div></div>");
-            $(".share__content__two.post" + key).append("<div class='share__block__detail'><label>Tác giả: <a class='link__profile' href=''>" + value.author.username + "</a></label><label>Ngày đăng: " + dateString + "</label><label><a href='" + hrefLocation + "/post/" + value.id + "'><i class='far fa-comment-dots'></i>" + value.comments.length + "</a></label><label><i class='far fa-eye'></i>" + value.viewNumber + "</label></div>");
+            $(".share__content__two.post" + key).append("<div class='share__block__detail'><label>Tác giả: <a class='link__profile' href='" + hrefLocation + "/profile?username=" + value.author.username + "'>" + value.author.username + "</a></label><label>Ngày đăng: " + dateString + "</label><label><a href='" + hrefLocation + "/post/" + value.id + "'><i class='far fa-comment-dots'></i>" + value.comments.length + "</a></label><label><i class='far fa-eye'></i>" + value.viewNumber + "</label></div>");
         });
     }
 

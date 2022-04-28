@@ -236,7 +236,6 @@
         });
     })
     function appendPosts(posts){
-        let hrefLocation = location.origin + "/SpringMVC_war";
         $.each(posts, function (key, value) {
             let createdDate = new Date(value.createdDate);
             let dateString = createdDate.getDate() + "/" + createdDate.getMonth() + "/" + createdDate.getFullYear();

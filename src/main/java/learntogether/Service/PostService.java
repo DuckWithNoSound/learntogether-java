@@ -3,23 +3,24 @@ package learntogether.Service;
 import learntogether.Converter.PostConverter;
 import learntogether.DTO.PostDTO;
 import learntogether.DTO.UserDetail;
+import learntogether.Entity.CommentPostEntity;
 import learntogether.Entity.PostEntity;
 import learntogether.Entity.ScorePostEntity;
 import learntogether.Entity.TagEntity;
 import learntogether.IService.IPostService;
 import learntogether.IService.ITagService;
-import learntogether.IService.IUserService;
 import learntogether.Repository.PostRepository;
+import learntogether.Repository.ScoreOfCommentPostRepository;
 import learntogether.Repository.ScorePostRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import learntogether.Repository.UserRepository;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /*
   Created by Luvbert
@@ -30,16 +31,20 @@ public class PostService implements IPostService {
 
     private PostRepository postRepository;
     private ITagService tagService;
-    private IUserService userService;
+    private UserRepository userRepository;
     private PostConverter postConverter;
     private ScorePostRepository scorePostRepository;
+    private ScoreOfCommentPostRepository scoreOfCommentPostRepository;
 
-    public PostService(PostRepository postRepository, ITagService tagService, IUserService userService, PostConverter postConverter, ScorePostRepository scorePostRepository){
+    public PostService(PostRepository postRepository, ITagService tagService, UserRepository userRepository,
+                       PostConverter postConverter, ScorePostRepository scorePostRepository,
+                       ScoreOfCommentPostRepository scoreOfCommentPostRepository){
         this.postRepository = postRepository;
         this.tagService = tagService;
-        this.userService = userService;
+        this.userRepository = userRepository;
         this.postConverter = postConverter;
         this.scorePostRepository = scorePostRepository;
+        this.scoreOfCommentPostRepository = scoreOfCommentPostRepository;
     }
 
     @Override
@@ -97,22 +102,30 @@ public class PostService implements IPostService {
             postEntity.setTags(tags);
         }
 
-        postEntity.setUser(userService.findUserByUsername(username));
+        postEntity.setUser(userRepository.findByUsername(username));
         postRepository.save(postEntity);
         return postConverter.toDTO(postRepository.findOne(postEntity.getId()));
     }
 
     @Override
     public boolean deletePost (Long[] arrPostId) throws Exception {
-        String username = ((UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        if(username == null){
+        UserDetail user = ((UserDetail)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        if(user == null){
             throw new Exception("User not login !");
         }
         if(arrPostId == null) {
             throw new Exception("Nothing to delete !");
         }
         for (int i = 0; i < arrPostId.length; i++) {
-            postRepository.delete(postRepository.getOne(arrPostId[i]));
+            PostEntity temp = postRepository.findOne(arrPostId[i]);
+            if(temp.getUser().getUsername().equals(user.getUsername()) || user.getRole().getId() >= 3){
+                scorePostRepository.deleteAllByPost(temp);
+                List<CommentPostEntity> commentPostEntities = temp.getCommentsPost();
+                for(int j = 0; j < commentPostEntities.size(); j++){
+                    scoreOfCommentPostRepository.deleteAllByCommentPost(commentPostEntities.get(j));
+                }
+                postRepository.delete(temp);
+            } else throw new Exception("You do not have permission to delete post(post id = " + temp.getId() + ").");
         }
         return true;
     }
@@ -165,7 +178,7 @@ public class PostService implements IPostService {
             scorePostEntity = new ScorePostEntity();
             scorePostEntity.setScoreType(scoreType);
             scorePostEntity.setPost(postEntity);
-            scorePostEntity.setUser(userService.findUserByUsername(user.getUsername()));
+            scorePostEntity.setUser(userRepository.findByUsername(user.getUsername()));
             scorePostRepository.save(scorePostEntity);
             if(scoreType == 1){
                 return (postEntity.getScore()+1);

@@ -1,5 +1,7 @@
 package learntogether.Entity;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,8 @@ public class PostEntity extends BaseEntity{
     private UserEnity user;
 
     @OneToMany(mappedBy = "post")
+    @Cascade(value = org.hibernate.annotations.CascadeType.ALL)
+    @OrderBy("score desc")
     List<CommentPostEntity> commentsPost = new ArrayList<>();
 
     @ManyToMany

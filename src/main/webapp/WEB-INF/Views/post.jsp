@@ -96,9 +96,9 @@ function appendData(data){
         let currentRoleId = temp.substr(temp.length-1);
 
         if(currentUsername.includes(data.author.username)){
-            $(".post__block__content__first").append("<div class='dropdown__postblock'><button class='dropdownBtn__postblock' onclick='dropdownFunction()'><i class='fas fa-ellipsis-h post__block__content__more'></i></button><div class='arrow-up' id='Arrow-up'></div><div class='dropdown-content__postblock' id='Dropdown-content__postblock'><a href='" + hrefLocation + "/discussion/post/edit?postid=" + data.id + "'>Sửa bài viết</a><a href='#'>Xóa bài viết</a><a href='#'>Bật thông báo</a></div></div>");
-        } else if(currentRoleId <= 3){
-            $(".post__block__content__first").append("<div class='dropdown__postblock'><button class='dropdownBtn__postblock' onclick='dropdownFunction()'><i class='fas fa-ellipsis-h post__block__content__more'></i></button><div class='arrow-up' id='Arrow-up'></div><div class='dropdown-content__postblock' id='Dropdown-content__postblock'><a href='#'>Xóa bài viết</a><a href='#'>Bật thông báo</a></div></div>");
+            $(".post__block__content__first").append("<div class='dropdown__postblock'><button class='dropdownBtn__postblock' onclick='dropdownFunction()'><i class='fas fa-ellipsis-h post__block__content__more'></i></button><div class='arrow-up' id='Arrow-up'></div><div class='dropdown-content__postblock' id='Dropdown-content__postblock'><a href='" + hrefLocation + "/discussion/post/edit?postid=" + data.id + "'>Sửa bài viết</a><a onclick='deletePost("+ data.id +")' href='#'>Xóa bài viết</a><a href='#'>Bật thông báo</a></div></div>");
+        } else if(currentRoleId >= 3){
+            $(".post__block__content__first").append("<div class='dropdown__postblock'><button class='dropdownBtn__postblock' onclick='dropdownFunction()'><i class='fas fa-ellipsis-h post__block__content__more'></i></button><div class='arrow-up' id='Arrow-up'></div><div class='dropdown-content__postblock' id='Dropdown-content__postblock'><a onclick='deletePost("+ data.id +")' href='#'>Xóa bài viết</a><a href='#'>Bật thông báo</a></div></div>");
         }
         else {
             $(".post__block__content__first").append("<div class='dropdown__postblock'><button class='dropdownBtn__postblock' onclick='dropdownFunction()'><i class='fas fa-ellipsis-h post__block__content__more'></i></button><div class='arrow-up' id='Arrow-up'></div><div class='dropdown-content__postblock' id='Dropdown-content__postblock'><a href='#'>Báo cáo</a><a href='#'>Bật thông báo</a></div></div>");
@@ -111,7 +111,7 @@ function appendData(data){
 
     let createdDate = new Date(data.createdDate);
     let dateString = createdDate.getDate() + "/" + createdDate.getMonth() + "/" + createdDate.getFullYear();
-    $(".post__block__detail").append("<label>Tác giả: <a href='#'>" + data.author.username + "</a></label>");
+    $(".post__block__detail").append("<label>Tác giả: <a href='" + hrefLocation + "/profile?username=" + data.author.username + "'>" + data.author.username + "</a></label>");
     $(".post__block__detail").append("<label>Ngày đăng: " + dateString + "</label>");
     if(data.modifiedDate != null){
         $(".post__block__detail").append("<label>Cập nhật lần cuối: " + getModifiedDateFormat(data.modifiedDate) + "</label>");
@@ -133,61 +133,115 @@ function appendData(data){
     appendComments(data.comments);
 }
 
-function appendComments(data){
-    $.each(data, function (key, value){
-        let createdDate = new Date(value.createdDate);
-        let dateString = createdDate.getDate() + "/" + createdDate.getMonth() + "/" + createdDate.getFullYear();
-        $(".post__comment").append("<div class='post__comment__block'><div class='post__comment__block__first'><div class='UpAndDown'><a href='#'><i class='fas fa-caret-up' id='button__score'></i></a><label>" + value.score + "</label><a href='#'><i class='fas fa-caret-down' id='button__score'></i></a></div></div><div class='post__comment__block__second'><div class='comment__block__second__one'><img src='" + hrefLocation + value.authorAvatar + "' class='img__avatar__52' alt=''><div><label><a href='#'>" + value.authorName + "</a></label><label class='user_level'>" + value.authorRole + "</label></div><label>Ngày đăng: " + dateString + "</label></div><div class='comment__block__second__two'><p>" + value.content + "</p></div></div></div>");
-    });
-}
-function getModifiedDateFormat(data){
-    let modifiedDate = data;
-    let modifiedDateForNow = Date.parse(new Date()) - modifiedDate;
-    let minutes = 60 * 1000, hours = 60 * 60 * 1000, days = 24 * 60 * 60 * 1000;
-    if(modifiedDateForNow <= minutes){
-        modifiedDateForNow = "vừa xong";
-    } else if(modifiedDateForNow > minutes && modifiedDateForNow <= hours){
-        modifiedDateForNow = Math.round(modifiedDateForNow / minutes) + " phút trước";
-    } else if(modifiedDateForNow > hours && modifiedDateForNow <= days){
-        modifiedDateForNow = Math.round(modifiedDateForNow / hours) + " giờ trước";
-    } else if(modifiedDateForNow > days && modifiedDateForNow <= days * 30){
-        modifiedDateForNow = Math.round(modifiedDateForNow / days) + " ngày trước";
-    } else {
-        modifiedDate = new Date(data);
-        modifiedDateForNow = modifiedDate.getDate() + "/" + modifiedDate.getMonth() + "/" + modifiedDate.getFullYear();
+    function appendComments(data){
+        $.each(data, function (key, value){
+            console.log(value);
+            let createdDate = new Date(value.createdDate);
+            let dateString = createdDate.getDate() + "/" + createdDate.getMonth() + "/" + createdDate.getFullYear();
+            <security:authorize access="isAnonymous()">
+            $(".post__comment").append("<div class='post__comment__block'><div class='post__comment__block__first'><div class='UpAndDown'><a href='#'><i class='fas fa-caret-up' id='button__score'></i></a><label>" + value.score + "</label><a href='#'><i class='fas fa-caret-down' id='button__score'></i></a></div></div><div class='post__comment__block__second'><div class='comment__block__second__one'><img src='" + hrefLocation + value.authorAvatar + "' class='img__avatar__52' alt=''><div><label><a href='" + hrefLocation + "/profile?username=" + value.authorName + "'>" + value.authorName + "</a></label><label class='user_level'>" + value.authorRole + "</label></div><label>Ngày đăng: " + dateString + "</label></div><div class='comment__block__second__two'><p>" + value.content + "</p></div></div></div>");
+            </security:authorize>
+            <security:authorize access="isAuthenticated()">
+            $.ajax({
+                url: hrefLocation + "/api/commentpost/score/currently?commentpostid=" + value.id,
+                type: "GET",
+                dataType: 'json'
+            }).done(function (result){
+                console.log(result);
+                if(result.currentVote == 1){
+                    $(".post__comment").append("<div class='post__comment__block'><div class='post__comment__block__first'><div class='UpAndDown'><a><i class='fas fa-caret-up isActive' id='button__score'></i></a><label>" + value.score + "</label><a onclick='voteScoreCommentPost(" + value.id + ",-1)' href='#'><i class='fas fa-caret-down' id='button__score'></i></a></div></div><div class='post__comment__block__second'><div class='comment__block__second__one'><img src='" + hrefLocation + value.authorAvatar + "' class='img__avatar__52' alt=''><div><label><a href='" + hrefLocation + "/profile?username=" + value.authorName + "'>" + value.authorName + "</a></label><label class='user_level'>" + value.authorRole + "</label></div><label>Ngày đăng: " + dateString + "</label></div><div class='comment__block__second__two'><p>" + value.content + "</p></div></div></div>");
+                } else if(result.currentVote == -1){
+                    $(".post__comment").append("<div class='post__comment__block'><div class='post__comment__block__first'><div class='UpAndDown'><a onclick='voteScoreCommentPost(" + value.id + ",1)' href='#'><i class='fas fa-caret-up' id='button__score'></i></a><label>" + value.score + "</label><a><i class='fas fa-caret-down isActive' id='button__score'></i></a></div></div><div class='post__comment__block__second'><div class='comment__block__second__one'><img src='" + hrefLocation + value.authorAvatar + "' class='img__avatar__52' alt=''><div><label><a href='" + hrefLocation + "/profile?username=" + value.authorName + "'>" + value.authorName + "</a></label><label class='user_level'>" + value.authorRole + "</label></div><label>Ngày đăng: " + dateString + "</label></div><div class='comment__block__second__two'><p>" + value.content + "</p></div></div></div>");
+                } else {
+                    $(".post__comment").append("<div class='post__comment__block'><div class='post__comment__block__first'><div class='UpAndDown'><a onclick='voteScoreCommentPost(" + value.id + ",1)' href='#'><i class='fas fa-caret-up' id='button__score'></i></a><label>" + value.score + "</label><a onclick='voteScoreCommentPost(" + value.id + ",-1)' href='#'><i class='fas fa-caret-down' id='button__score'></i></a></div></div><div class='post__comment__block__second'><div class='comment__block__second__one'><img src='" + hrefLocation + value.authorAvatar + "' class='img__avatar__52' alt=''><div><label><a href='" + hrefLocation + "/profile?username=" + value.authorName + "'>" + value.authorName + "</a></label><label class='user_level'>" + value.authorRole + "</label></div><label>Ngày đăng: " + dateString + "</label></div><div class='comment__block__second__two'><p>" + value.content + "</p></div></div></div>");
+                }
+            });
+            </security:authorize>
+        });
     }
-    return modifiedDateForNow;
-}
-
-function voteScorePost(scoreType){
-    let postId = location.pathname.match(/\d+/g);
-    $.ajax({
-        url: hrefLocation + "/api/post/score?postid=" + postId + "&scoretype=" + scoreType,
-        type: "GET",
-        dataType: "json"
-    }).done(function (result){
-        location.reload();
-    });
-}
-function postComment(){
-    let data = {}, dataJson;
-    data["postId"] = $('#post_id').val();
-    data["content"] = ckeditor.getData();
-    dataJson = JSON.stringify(data);
-    console.log(dataJson);
-    $.ajax({
-        url: hrefLocation + "/api/commentpost/",
-        type: "POST",
-        data: dataJson,
-        dataType: "json",
-        contentType: "application/json"
-    }).done(function (result) {
-        if(result.Message != null){
-            alert("Bình luận thất bại!");
-            console.log(result.Message);
+    function getModifiedDateFormat(data){
+        let modifiedDate = data;
+        let modifiedDateForNow = Date.parse(new Date()) - modifiedDate;
+        let minutes = 60 * 1000, hours = 60 * 60 * 1000, days = 24 * 60 * 60 * 1000;
+        if(modifiedDateForNow <= minutes){
+            modifiedDateForNow = "vừa xong";
+        } else if(modifiedDateForNow > minutes && modifiedDateForNow <= hours){
+            modifiedDateForNow = Math.round(modifiedDateForNow / minutes) + " phút trước";
+        } else if(modifiedDateForNow > hours && modifiedDateForNow <= days){
+            modifiedDateForNow = Math.round(modifiedDateForNow / hours) + " giờ trước";
+        } else if(modifiedDateForNow > days && modifiedDateForNow <= days * 30){
+            modifiedDateForNow = Math.round(modifiedDateForNow / days) + " ngày trước";
         } else {
-            location.reload();
+            modifiedDate = new Date(data);
+            modifiedDateForNow = modifiedDate.getDate() + "/" + modifiedDate.getMonth() + "/" + modifiedDate.getFullYear();
         }
-    })
-}
+        return modifiedDateForNow;
+    }
+
+    function voteScorePost(scoreType){
+        let postId = location.pathname.match(/\d+/g);
+        $.ajax({
+            url: hrefLocation + "/api/post/score?postid=" + postId + "&scoretype=" + scoreType,
+            type: "GET",
+            dataType: "json"
+        }).done(function (result){
+            if(result.Message != null){
+                alert(result.Message);
+            }
+            location.reload();
+        });
+    }
+    function voteScoreCommentPost(commentPostId, scoreType){
+        $.ajax({
+            url: hrefLocation + "/api/commentpost/score?commentpostid=" + commentPostId + "&scoretype=" + scoreType,
+            type: "GET",
+            dataType: "json"
+        }).done(function (result){
+            if(result.Message != null){
+                alert(result.Message);
+            }
+            location.reload();
+        });
+    }
+    function postComment(){
+        let data = {}, dataJson;
+        data["postId"] = $('#post_id').val();
+        data["content"] = ckeditor.getData();
+        dataJson = JSON.stringify(data);
+        console.log(dataJson);
+        $.ajax({
+            url: hrefLocation + "/api/commentpost/",
+            type: "POST",
+            data: dataJson,
+            dataType: "json",
+            contentType: "application/json"
+        }).done(function (result) {
+            if(result.Message != null){
+                alert("Bình luận thất bại!");
+                console.log(result.Message);
+            } else {
+                location.reload();
+            }
+        })
+    }
+    function deletePost(postId){
+        let data = {}, dataJson;
+        data["ids"] = [postId];
+        dataJson = JSON.stringify(data);
+        $.ajax({
+            url: hrefLocation + "/api/post",
+            type: "DELETE",
+            data: dataJson,
+            dataType: "json",
+            contentType: "application/json"
+        }).done(function (result) {
+            let message = result.Message + "";
+            if(message.includes("success")){
+                alert("Xóa bài viết thành công!");
+                location.href = hrefLocation + "/discussion";
+            } else {
+                alert(message);
+            }
+        })
+    }
 </script>

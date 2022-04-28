@@ -77,6 +77,18 @@ public class HomeController {
         return modelAndView;
     }
 
+    @GetMapping(path = "/profile")
+    public ModelAndView profilePage(){
+        ModelAndView modelAndView = new ModelAndView("profile");
+        return modelAndView;
+    }
+
+    @GetMapping(path = "/profile/")
+    public ModelAndView myProfilePage(){
+        ModelAndView modelAndView = new ModelAndView("profile");
+        return modelAndView;
+    }
+
     @PostMapping(path = "/register")
     public ModelAndView registerUser(@ModelAttribute("user") @Valid UserDTO userDTO, BindingResult bindingResult){
         ModelAndView mav;

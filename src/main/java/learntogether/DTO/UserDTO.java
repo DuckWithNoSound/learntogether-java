@@ -13,23 +13,14 @@ import java.sql.Timestamp;
 public class UserDTO {
     private String id;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 6, max = 255)
     private String username;
 
-    @NotNull
-    @NotEmpty
-    @Size(min = 6, max = 255)
     private String password;
 
     private String fullname;
 
     private String avatar;
 
-    @ValidEmail
-    @NotNull
-    @NotEmpty
     private String email;
 
     private String phoneNumber;
@@ -45,6 +36,18 @@ public class UserDTO {
     private Timestamp createdDate;
 
     private Timestamp modifiedDate;
+
+    private Integer numberOfUserPost;
+
+    private Integer totalScore;
+
+    public Integer getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(Integer totalScore) {
+        this.totalScore = totalScore;
+    }
 
     public String getFullname() {
         return fullname;
@@ -148,5 +151,13 @@ public class UserDTO {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public Integer getNumberOfUserPost() {
+        return numberOfUserPost;
+    }
+
+    public void setNumberOfUserPost(Integer numberOfUserPost) {
+        this.numberOfUserPost = numberOfUserPost;
     }
 }

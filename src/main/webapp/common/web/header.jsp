@@ -65,7 +65,7 @@
                             </a>
                             <div class="Personal-hover">
                                 <div class="arrow"></div>
-                                <a href="">Trang cá nhân</a>
+                                <a href="<c:url value='/profile'/>">Trang cá nhân</a>
                                 <security:authorize access="hasAnyRole('1', '2')">
                                     <a href="">Trang quản trị</a>
                                 </security:authorize>

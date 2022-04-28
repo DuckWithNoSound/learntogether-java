@@ -41,6 +41,7 @@ public class UserConverter implements IConverter<UserDTO, UserEnity> {
         userDTO.setUsername(userEnity.getUsername());
         userDTO.setFullname(userEnity.getFullname());
         userDTO.setUserQuote(userEnity.getUserQuote());
+        userDTO.setEmail(userDTO.getEmail());
         userDTO.setAvatar(userEnity.getAvatar());
         userDTO.setId(userEnity.getId() + "");
         userDTO.setRoleName(userEnity.getRole().getRoleName());
