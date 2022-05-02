@@ -83,9 +83,15 @@ public class HomeController {
         return modelAndView;
     }
 
-    @GetMapping(path = "/profile/")
-    public ModelAndView myProfilePage(){
+    @GetMapping(path = "/profile/{username}")
+    public ModelAndView usernameProfilePage(){
         ModelAndView modelAndView = new ModelAndView("profile");
+        return modelAndView;
+    }
+
+    @GetMapping(path = "/profile/{username}/post")
+    public ModelAndView myProfilePage(){
+        ModelAndView modelAndView = new ModelAndView("userpost");
         return modelAndView;
     }
 

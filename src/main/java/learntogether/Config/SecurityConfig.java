@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.servlet.Filter;
+
 /*
   Created by Luvbert
 */
@@ -86,6 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID", "AuthenticationCookie");
 
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-                http.addFilterBefore(cookieAuthenticationFilter, JwtAuthenticationFilter.class);
+                http.addFilterAfter(cookieAuthenticationFilter, JwtAuthenticationFilter.class);
     }
 }

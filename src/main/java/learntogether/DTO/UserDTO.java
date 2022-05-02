@@ -41,6 +41,8 @@ public class UserDTO {
 
     private Integer totalScore;
 
+    private String newPassword;
+
     public Integer getTotalScore() {
         return totalScore;
     }
@@ -159,5 +161,13 @@ public class UserDTO {
 
     public void setNumberOfUserPost(Integer numberOfUserPost) {
         this.numberOfUserPost = numberOfUserPost;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
 }

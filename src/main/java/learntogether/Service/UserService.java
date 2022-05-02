@@ -30,11 +30,13 @@ public class UserService implements IUserService {
     private UserRepository userRepository;
     private UserConverter userConverter;
     private PostRepository postRepository;
+    private BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserConverter userConverter, PostRepository postRepository){
+    public UserService(UserRepository userRepository, UserConverter userConverter, PostRepository postRepository, BCryptPasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.postRepository = postRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -46,6 +48,12 @@ public class UserService implements IUserService {
         }
         if(isUsernameExist(userDTO.getUsername())){
             message.put("username", "Username is already registered !");
+        }
+        if(userDTO.getUsername().length() < 6){
+            message.put("username", "Username is too short !");
+        }
+        if(userDTO.getPassword().length() < 6){
+            message.put("password", "Password is too short !");
         }
         //
         if(message.isEmpty()){
@@ -117,5 +125,71 @@ public class UserService implements IUserService {
         if(userEnity == null) return false;
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.matches(password, userEnity.getPassword());
+    }
+
+    @Override
+    public UserDTO changeUserQuote(UserDTO userDTO) throws Exception{
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(username == null){
+            throw new Exception("User not login");
+        }
+        if(userDTO.getUserQuote() == null){
+            throw new Exception("New user quote not to be empty");
+        }
+        UserEnity entity = userRepository.findByUsername(username);
+        entity.setUserQuote(userDTO.getUserQuote());
+        return userConverter.toDTO(userRepository.save(entity));
+    }
+
+    @Override
+    public UserDTO changeUserPhoneOrFullname(UserDTO userDTO) throws Exception {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(username == null){
+            throw new Exception("User not login");
+        }
+        if(userDTO.getPhoneNumber() == null && userDTO.getFullname() == null){
+            throw new Exception("New user information not to be empty");
+        }
+        UserEnity entity = userRepository.findByUsername(username);
+        if(userDTO.getPhoneNumber() != null){
+            entity.setPhoneNumber(userDTO.getPhoneNumber());
+        }
+        if(userDTO.getFullname() != null){
+            entity.setFullname(userDTO.getFullname());
+        }
+        return userConverter.toDTO(userRepository.save(entity));
+    }
+
+    @Override
+    public UserDTO changeUserPassword(UserDTO userDTO) throws Exception {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(username == null){
+            throw new Exception("User not login");
+        }
+        if(userDTO.getPassword() == null || userDTO.getNewPassword() == null){
+            throw new Exception("Password not to be empty");
+        }
+        UserEnity entity = userRepository.findByUsername(username);
+        if(passwordEncoder.matches(userDTO.getPassword(), entity.getPassword())){
+            entity.setPassword(passwordEncoder.encode(userDTO.getNewPassword()));
+            return userConverter.toDTO(userRepository.save(entity));
+        } else {
+            throw new Exception("Password not match");
+        }
+
+    }
+
+    @Override
+    public UserDTO changeUserAvatar(UserDTO userDTO) throws Exception {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(username == null){
+            throw new Exception("User not login");
+        }
+        if(userDTO.getAvatar() == null){
+            throw new Exception("New user avatar not to be empty");
+        }
+        UserEnity entity = userRepository.findByUsername(username);
+        entity.setAvatar(userDTO.getAvatar());
+        return userConverter.toDTO(userRepository.save(entity));
     }
 }

@@ -7,6 +7,7 @@ import learntogether.DTO.UserDetail;
 import learntogether.JWT.JwtAuthService;
 import learntogether.Service.UserDetailsServiceImpl;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,10 +15,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +42,21 @@ public class CookieAuthenticationFilter extends OncePerRequestFilter {
         this.jwtAuthService = jwtAuthService;
         this.userDetailsService = userDetailsService;
         this.mapper = mapper;
+    }
+
+    private void auth(String authCookie, HttpServletRequest request){
+        if (StringUtils.hasText(authCookie) && jwtAuthService.validateJWT(authCookie)) {
+            UserDetail user = (UserDetail) userDetailsService.loadUserByUsername(jwtAuthService.getUsernameFromJWT(authCookie));
+            if (user != null) {
+                List<GrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority(user.getRole().getId() + " "));
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, authorities);
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            }
+        }
     }
 
     @Override
@@ -70,19 +89,5 @@ public class CookieAuthenticationFilter extends OncePerRequestFilter {
             mapper.writeValue(response.getWriter(), message);
         }
         filterChain.doFilter(request, response);
-    }
-    private void auth(String authCookie, HttpServletRequest request){
-        if (StringUtils.hasText(authCookie) && jwtAuthService.validateJWT(authCookie)) {
-            UserDetail user = (UserDetail) userDetailsService.loadUserByUsername(jwtAuthService.getUsernameFromJWT(authCookie));
-            if (user != null) {
-                List<GrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority(user.getRole().getId() + " "));
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, authorities);
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-            }
-        }
     }
 }

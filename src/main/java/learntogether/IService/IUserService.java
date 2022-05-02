@@ -17,4 +17,8 @@ public interface IUserService {
     boolean isEmailExist(String email);
     boolean isUsernameExist(String username);
     boolean isUsernameAndPasswordMatch(String username, String password);
+    UserDTO changeUserQuote(UserDTO userDTO) throws Exception;
+    UserDTO changeUserPhoneOrFullname(UserDTO userDTO) throws Exception;
+    UserDTO changeUserPassword(UserDTO userDTO) throws Exception;
+    UserDTO changeUserAvatar(UserDTO userDTO) throws Exception;
 }
