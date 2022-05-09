@@ -154,7 +154,7 @@ function convertFormToJson(form){
   $.each(formData, function (i, v) {
     data[v.name + ""] = v.value
   })
-  return data
+  return data;
 }
 function deleteAuthCookie(){
   document.cookie = "AuthenticationCookie= ; max-age=" + 2*60 + "; path=/;";
