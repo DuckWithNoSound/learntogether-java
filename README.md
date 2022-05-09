@@ -1,1 +1,5 @@
-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
+This is a my learning Spring MVC project.\
+--------------------Database----------------------------\
+Database: MySQL\
+Database query file: db.sql\
+Database diagram: DB_diagram.png
