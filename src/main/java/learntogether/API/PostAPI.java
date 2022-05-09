@@ -6,12 +6,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /*
@@ -25,7 +23,6 @@ public class PostAPI {
     public PostAPI(IPostService postService){
         this.postService = postService;
     }
-
     @GetMapping(value = "/api/post/{postId}")
     public ResponseEntity<?> getPost(@PathVariable(name = "postId") Long postId){
 
@@ -116,6 +113,20 @@ public class PostAPI {
             return ResponseEntity.ok(message);
         }
         return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping(value = "/api/post/find")
+    public ResponseEntity<?> findPost(@RequestParam(value = "keyword", required = true) String keyword){
+
+        try{
+            List<PostDTO> dtos = postService.findAllByKeyword(keyword);
+            return ResponseEntity.ok(dtos);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            Map<String, String> message = new HashMap<>();
+            message.put("Message", exception.getMessage());
+            return ResponseEntity.ok(message);
+        }
     }
 
     @GetMapping(value = "/api/post/all/count")

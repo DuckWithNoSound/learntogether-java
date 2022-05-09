@@ -142,6 +142,19 @@ public class PostService implements IPostService {
     }
 
     @Override
+    public List<PostDTO> findAllByKeyword(String keyword) throws Exception {
+        List<PostEntity> entities = postRepository.findAllByTitleContainingOrContentContaining(keyword, keyword);
+        if(entities.isEmpty()){
+            throw new Exception("Not found!");
+        }
+        List<PostDTO> dtos = new ArrayList<>();
+        for(PostEntity postEntity : entities){
+            dtos.add(postConverter.toDTO(postEntity));
+        }
+        return dtos;
+    }
+
+    @Override
     public Long countAllPost() throws Exception {
         return postRepository.count();
     }

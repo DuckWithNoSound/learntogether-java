@@ -17,6 +17,7 @@ public interface IPostService {
     PostDTO updatePost(PostDTO postDTO) throws Exception;
     boolean deletePost(Long[] arrPostId) throws Exception;
     List<PostDTO> findAll(Pageable pageRequest) throws Exception;
+    List<PostDTO> findAllByKeyword(String keyword) throws Exception;
     Long countAllPost() throws Exception;
     Integer upOrDownScore(Long postId, Byte scoreType) throws Exception;
     Integer upView(Long postId) throws Exception;
